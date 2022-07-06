@@ -9,13 +9,22 @@
 /* Begin PBXBuildFile section */
 		C9AD82D02875266A002D5EDF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82CF2875266A002D5EDF /* AppDelegate.swift */; };
 		C9AD82D22875266A002D5EDF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82D12875266A002D5EDF /* SceneDelegate.swift */; };
-		C9AD82D42875266A002D5EDF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82D32875266A002D5EDF /* ViewController.swift */; };
-		C9AD82D72875266A002D5EDF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9AD82D52875266A002D5EDF /* Main.storyboard */; };
+		C9AD82D42875266A002D5EDF /* InfiniteCarouselViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82D32875266A002D5EDF /* InfiniteCarouselViewController.swift */; };
 		C9AD82D92875266B002D5EDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9AD82D82875266B002D5EDF /* Assets.xcassets */; };
 		C9AD82DC2875266B002D5EDF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9AD82DA2875266B002D5EDF /* LaunchScreen.storyboard */; };
 		C9AD82E72875266C002D5EDF /* InfiniteCarouselTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82E62875266C002D5EDF /* InfiniteCarouselTests.swift */; };
 		C9AD82F12875266C002D5EDF /* InfiniteCarouselUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82F02875266C002D5EDF /* InfiniteCarouselUITests.swift */; };
 		C9AD82F32875266C002D5EDF /* InfiniteCarouselUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82F22875266C002D5EDF /* InfiniteCarouselUITestsLaunchTests.swift */; };
+		C9AD830028752CAE002D5EDF /* InfiniteCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82FF28752CAE002D5EDF /* InfiniteCarouselCell.swift */; };
+		C9AD8304287531CD002D5EDF /* InfiniteCarouselDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD8303287531CD002D5EDF /* InfiniteCarouselDataSource.swift */; };
+		C9AD830628753C6E002D5EDF /* InfiniteCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD830528753C6E002D5EDF /* InfiniteCarouselView.swift */; };
+		C9AD830828755353002D5EDF /* InfiniteCarouselLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD830728755353002D5EDF /* InfiniteCarouselLayout.swift */; };
+		C9AD830E287569C3002D5EDF /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AD8309287569C3002D5EDF /* 1.png */; };
+		C9AD830F287569C3002D5EDF /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AD830A287569C3002D5EDF /* 2.png */; };
+		C9AD8310287569C3002D5EDF /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AD830B287569C3002D5EDF /* 4.png */; };
+		C9AD8311287569C3002D5EDF /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AD830C287569C3002D5EDF /* 5.png */; };
+		C9AD8312287569C3002D5EDF /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AD830D287569C3002D5EDF /* 3.png */; };
+		C9AD831428756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD831328756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +48,7 @@
 		C9AD82CC2875266A002D5EDF /* InfiniteCarousel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniteCarousel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AD82CF2875266A002D5EDF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9AD82D12875266A002D5EDF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C9AD82D32875266A002D5EDF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		C9AD82D62875266A002D5EDF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C9AD82D32875266A002D5EDF /* InfiniteCarouselViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselViewController.swift; sourceTree = "<group>"; };
 		C9AD82D82875266B002D5EDF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C9AD82DB2875266B002D5EDF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C9AD82DD2875266B002D5EDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +57,16 @@
 		C9AD82EC2875266C002D5EDF /* InfiniteCarouselUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniteCarouselUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AD82F02875266C002D5EDF /* InfiniteCarouselUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselUITests.swift; sourceTree = "<group>"; };
 		C9AD82F22875266C002D5EDF /* InfiniteCarouselUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C9AD82FF28752CAE002D5EDF /* InfiniteCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselCell.swift; sourceTree = "<group>"; };
+		C9AD8303287531CD002D5EDF /* InfiniteCarouselDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselDataSource.swift; sourceTree = "<group>"; };
+		C9AD830528753C6E002D5EDF /* InfiniteCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselView.swift; sourceTree = "<group>"; };
+		C9AD830728755353002D5EDF /* InfiniteCarouselLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselLayout.swift; sourceTree = "<group>"; };
+		C9AD8309287569C3002D5EDF /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
+		C9AD830A287569C3002D5EDF /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
+		C9AD830B287569C3002D5EDF /* 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4.png; sourceTree = "<group>"; };
+		C9AD830C287569C3002D5EDF /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
+		C9AD830D287569C3002D5EDF /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
+		C9AD831328756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselDelegateFlowLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,11 +119,20 @@
 			children = (
 				C9AD82CF2875266A002D5EDF /* AppDelegate.swift */,
 				C9AD82D12875266A002D5EDF /* SceneDelegate.swift */,
-				C9AD82D32875266A002D5EDF /* ViewController.swift */,
-				C9AD82D52875266A002D5EDF /* Main.storyboard */,
+				C9AD82D32875266A002D5EDF /* InfiniteCarouselViewController.swift */,
+				C9AD830528753C6E002D5EDF /* InfiniteCarouselView.swift */,
+				C9AD82FF28752CAE002D5EDF /* InfiniteCarouselCell.swift */,
+				C9AD830728755353002D5EDF /* InfiniteCarouselLayout.swift */,
+				C9AD8303287531CD002D5EDF /* InfiniteCarouselDataSource.swift */,
+				C9AD831328756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift */,
 				C9AD82D82875266B002D5EDF /* Assets.xcassets */,
 				C9AD82DA2875266B002D5EDF /* LaunchScreen.storyboard */,
 				C9AD82DD2875266B002D5EDF /* Info.plist */,
+				C9AD8309287569C3002D5EDF /* 1.png */,
+				C9AD830A287569C3002D5EDF /* 2.png */,
+				C9AD830D287569C3002D5EDF /* 3.png */,
+				C9AD830B287569C3002D5EDF /* 4.png */,
+				C9AD830C287569C3002D5EDF /* 5.png */,
 			);
 			path = InfiniteCarousel;
 			sourceTree = "<group>";
@@ -231,9 +258,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9AD830E287569C3002D5EDF /* 1.png in Resources */,
 				C9AD82DC2875266B002D5EDF /* LaunchScreen.storyboard in Resources */,
+				C9AD830F287569C3002D5EDF /* 2.png in Resources */,
+				C9AD8311287569C3002D5EDF /* 5.png in Resources */,
+				C9AD8310287569C3002D5EDF /* 4.png in Resources */,
+				C9AD8312287569C3002D5EDF /* 3.png in Resources */,
 				C9AD82D92875266B002D5EDF /* Assets.xcassets in Resources */,
-				C9AD82D72875266A002D5EDF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,8 +289,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9AD82D42875266A002D5EDF /* ViewController.swift in Sources */,
+				C9AD831428756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift in Sources */,
+				C9AD830628753C6E002D5EDF /* InfiniteCarouselView.swift in Sources */,
+				C9AD82D42875266A002D5EDF /* InfiniteCarouselViewController.swift in Sources */,
 				C9AD82D02875266A002D5EDF /* AppDelegate.swift in Sources */,
+				C9AD830828755353002D5EDF /* InfiniteCarouselLayout.swift in Sources */,
+				C9AD830028752CAE002D5EDF /* InfiniteCarouselCell.swift in Sources */,
+				C9AD8304287531CD002D5EDF /* InfiniteCarouselDataSource.swift in Sources */,
 				C9AD82D22875266A002D5EDF /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,14 +333,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C9AD82D52875266A002D5EDF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C9AD82D62875266A002D5EDF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C9AD82DA2875266B002D5EDF /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -441,7 +469,6 @@
 				INFOPLIST_FILE = InfiniteCarousel/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -468,7 +495,6 @@
 				INFOPLIST_FILE = InfiniteCarousel/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
