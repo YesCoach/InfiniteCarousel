@@ -23,7 +23,8 @@ open class InfiniteDataSources {
         }
         let min = Swift.min(estimatedItemSize.width, estimatedItemSize.height)
         let count = ceil(InfiniteLayout.minimumContentSize / min)
-        return Int(count)
+        // multiplier 값을 늘려서 배너 최대 인덱스 수 조절 가능
+        return Int(count) * 10
     }
 
     public static func numberOfSections(numberOfSections: Int, multiplier: Int) -> Int {
