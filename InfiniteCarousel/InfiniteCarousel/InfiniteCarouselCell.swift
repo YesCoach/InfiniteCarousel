@@ -15,6 +15,8 @@ class InfiniteCarouselCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleToFill
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 10
         return imageView
     }()
     
