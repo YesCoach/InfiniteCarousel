@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import InfiniteLayout
 
 class CarouselLayout: UICollectionViewFlowLayout {
     

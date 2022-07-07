@@ -1,0 +1,6 @@
+framework module Pods_InfiniteCarousel_InfiniteCarouselUITests {
+  umbrella header "Pods-InfiniteCarousel-InfiniteCarouselUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

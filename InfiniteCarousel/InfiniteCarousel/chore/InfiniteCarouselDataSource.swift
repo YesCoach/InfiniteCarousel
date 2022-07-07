@@ -27,8 +27,8 @@ class InfiniteCarouselDataSource: NSObject, UICollectionViewDataSource {
     }
 }
 
-extension InfiniteCarouselDataSource: InfiniteCarouselViewDelegate {
-    func dataChanged(data: [UIImage]) {
-        self.data = data
-    }
-}
+//extension InfiniteCarouselDataSource: InfiniteCarouselViewDelegate {
+//    func dataChanged(data: [UIImage]) {
+//        self.data = data
+//    }
+//}
