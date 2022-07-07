@@ -22,6 +22,7 @@ class InfiniteCarouselViewController: UIViewController {
         infiniteCollectionView.infiniteLayout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.85, height: UIScreen.main.bounds.height * 0.2)
         infiniteCollectionView.infiniteLayout.scrollDirection = .horizontal
         infiniteCollectionView.infiniteLayout.minimumLineSpacing = spacing
+        infiniteCollectionView.infiniteLayout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
         infiniteCollectionView.translatesAutoresizingMaskIntoConstraints = false
         return infiniteCollectionView
     }()
@@ -34,7 +35,8 @@ class InfiniteCarouselViewController: UIViewController {
     private var maximumTimes: Int {
         get { (images?.count ?? 0) * 20 }
     }
-    private var spacing: CGFloat = 20
+    /// 카드 간 간격
+    private var spacing: CGFloat = 15
 
     // MARK: - Life-Cycle
     override func viewDidLoad() {
