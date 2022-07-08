@@ -11,7 +11,7 @@
 		98EF2EF9D73F366D2A5BDC7B /* Pods_InfiniteCarouselTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 881B55ED28FE89C603F34B4C /* Pods_InfiniteCarouselTests.framework */; };
 		C9AD82D02875266A002D5EDF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82CF2875266A002D5EDF /* AppDelegate.swift */; };
 		C9AD82D22875266A002D5EDF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82D12875266A002D5EDF /* SceneDelegate.swift */; };
-		C9AD82D42875266A002D5EDF /* InfiniteCarouselViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82D32875266A002D5EDF /* InfiniteCarouselViewController.swift */; };
+		C9AD82D42875266A002D5EDF /* InfiniteCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82D32875266A002D5EDF /* InfiniteCarouselView.swift */; };
 		C9AD82D92875266B002D5EDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9AD82D82875266B002D5EDF /* Assets.xcassets */; };
 		C9AD82DC2875266B002D5EDF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9AD82DA2875266B002D5EDF /* LaunchScreen.storyboard */; };
 		C9AD82E72875266C002D5EDF /* InfiniteCarouselTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD82E62875266C002D5EDF /* InfiniteCarouselTests.swift */; };
@@ -26,6 +26,7 @@
 		C9AD8311287569C3002D5EDF /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AD830C287569C3002D5EDF /* 5.png */; };
 		C9AD8312287569C3002D5EDF /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AD830D287569C3002D5EDF /* 3.png */; };
 		C9AD831428756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9AD831328756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift */; };
+		C9BB022A2877F67B0097F518 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB02292877F67B0097F518 /* Main.swift */; };
 		E3EED5B6877B9F77F3BBE8BA /* Pods_InfiniteCarousel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCF6D201A4770AB8F66BF777 /* Pods_InfiniteCarousel.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,7 +55,7 @@
 		C9AD82CC2875266A002D5EDF /* InfiniteCarousel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniteCarousel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9AD82CF2875266A002D5EDF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C9AD82D12875266A002D5EDF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C9AD82D32875266A002D5EDF /* InfiniteCarouselViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselViewController.swift; sourceTree = "<group>"; };
+		C9AD82D32875266A002D5EDF /* InfiniteCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselView.swift; sourceTree = "<group>"; };
 		C9AD82D82875266B002D5EDF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C9AD82DB2875266B002D5EDF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C9AD82DD2875266B002D5EDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -72,6 +73,7 @@
 		C9AD830C287569C3002D5EDF /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
 		C9AD830D287569C3002D5EDF /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
 		C9AD831328756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteCarouselDelegateFlowLayout.swift; sourceTree = "<group>"; };
+		C9BB02292877F67B0097F518 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		CA1482C6EC54089A2D098809 /* Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig"; path = "Target Support Files/Pods-InfiniteCarousel-InfiniteCarouselUITests/Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D3CE70999F31051DF578484F /* Pods-InfiniteCarousel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InfiniteCarousel.release.xcconfig"; path = "Target Support Files/Pods-InfiniteCarousel/Pods-InfiniteCarousel.release.xcconfig"; sourceTree = "<group>"; };
 		DCF6D201A4770AB8F66BF777 /* Pods_InfiniteCarousel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InfiniteCarousel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,7 +159,8 @@
 			children = (
 				C9AD82CF2875266A002D5EDF /* AppDelegate.swift */,
 				C9AD82D12875266A002D5EDF /* SceneDelegate.swift */,
-				C9AD82D32875266A002D5EDF /* InfiniteCarouselViewController.swift */,
+				C9BB02292877F67B0097F518 /* Main.swift */,
+				C9AD82D32875266A002D5EDF /* InfiniteCarouselView.swift */,
 				C9AD82FF28752CAE002D5EDF /* InfiniteCarouselCell.swift */,
 				C9BB01DE28765DBF0097F518 /* chore */,
 				C9AD82D82875266B002D5EDF /* Assets.xcassets */,
@@ -443,7 +446,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9AD831428756D5D002D5EDF /* InfiniteCarouselDelegateFlowLayout.swift in Sources */,
-				C9AD82D42875266A002D5EDF /* InfiniteCarouselViewController.swift in Sources */,
+				C9AD82D42875266A002D5EDF /* InfiniteCarouselView.swift in Sources */,
+				C9BB022A2877F67B0097F518 /* Main.swift in Sources */,
 				C9AD82D02875266A002D5EDF /* AppDelegate.swift in Sources */,
 				C9AD830828755353002D5EDF /* InfiniteCarouselLayout.swift in Sources */,
 				C9AD830028752CAE002D5EDF /* InfiniteCarouselCell.swift in Sources */,

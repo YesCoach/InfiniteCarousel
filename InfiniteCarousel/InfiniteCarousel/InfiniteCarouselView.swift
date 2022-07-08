@@ -8,7 +8,7 @@
 import UIKit
 import InfiniteLayout
 
-class InfiniteCarouselViewController: UIViewController {
+class InfiniteCarouselView: UIView {
 
     // MARK: - Views
     private lazy var carouselView: InfiniteCollectionView = {
@@ -22,7 +22,7 @@ class InfiniteCarouselViewController: UIViewController {
         infiniteCollectionView.translatesAutoresizingMaskIntoConstraints = false
 
         // 레이아웃 설정
-        infiniteCollectionView.infiniteLayout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.85, height: UIScreen.main.bounds.height * 0.2)
+        infiniteCollectionView.infiniteLayout.itemSize = CGSize(width: width, height: height)
         infiniteCollectionView.infiniteLayout.scrollDirection = .horizontal
         infiniteCollectionView.infiniteLayout.minimumLineSpacing = spacing
         infiniteCollectionView.infiniteLayout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
@@ -41,38 +41,55 @@ class InfiniteCarouselViewController: UIViewController {
         get { (images?.count ?? 0) * 20 }
     }
     
-    /// 카드 간 간격
-    private var spacing: CGFloat = 15
+    /// 셀 크기와 간격
+    private var width: CGFloat = UIScreen.main.bounds.width * 0.85
+    private var height: CGFloat = UIScreen.main.bounds.height * 0.2
+    private var spacing: CGFloat = 20
     private var currentIndexPath: IndexPath?
 
-    // MARK: - Life-Cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
+    // MARK: - Initializer
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setUpLayout()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         bannerMove(by: timeInterval)
         carouselView.enrollCellAnimation()
     }
 
     // MARK: - Methods
-    /// 배너에 들어갈 이미지 데이터를 초기화 합니다.
-    func configure(with images: [UIImage]) {
+    /// 셀에 들어갈 이미지 데이터를 초기화 합니다.
+    func configure(with images: [UIImage]?) {
         self.images = images
         carouselView.reloadData()
     }
 
+    /// 셀의 크기를 설정합니다.
+    func configureCellSize(width: CGFloat, height: CGFloat) {
+        self.width = width
+        self.height = height
+    }
+    
+    /// 셀의 간격을 설정합니다.
+    func configureSpacing(with spacing: CGFloat) {
+        self.spacing = spacing
+    }
+    
     private func setUpLayout() {
-        view.backgroundColor = .white
-        view.addSubview(carouselView)
+        backgroundColor = .white
+        addSubview(carouselView)
         carouselView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            carouselView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            carouselView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            carouselView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            carouselView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3)
+            carouselView.topAnchor.constraint(equalTo: self.topAnchor),
+            carouselView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            carouselView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            carouselView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
 
@@ -94,7 +111,7 @@ class InfiniteCarouselViewController: UIViewController {
 }
 
 // MARK: - DataSource 구현부
-extension InfiniteCarouselViewController: UICollectionViewDataSource {
+extension InfiniteCarouselView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let datas = images else {
             debugPrint("이미지 데이터가 없습니다.")
@@ -116,13 +133,12 @@ extension InfiniteCarouselViewController: UICollectionViewDataSource {
         }
         let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
         cell.configure(with: images[realIndexPath.row])
-        debugPrint("셀 생성 \(indexPath)")
         return cell
     }
 }
 
 // MARK: - Delegate 구현부
-extension InfiniteCarouselViewController: UICollectionViewDelegate {
+extension InfiniteCarouselView: UICollectionViewDelegate {
     /// 셀 선택 시 해당 셀로 이동
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         bannerStop()
@@ -132,14 +148,14 @@ extension InfiniteCarouselViewController: UICollectionViewDelegate {
 }
 
 // MARK: - DelegateFlowLayout 구현부
-extension InfiniteCarouselViewController: UICollectionViewDelegateFlowLayout {
+extension InfiniteCarouselView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return collectionView.frame.width
     }
 }
 
 // MARK: - 스크롤시 자동 스크롤 타이머 on/off
-extension InfiniteCarouselViewController {
+extension InfiniteCarouselView {
     /// 터치 할 때 동작
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         bannerStop()
