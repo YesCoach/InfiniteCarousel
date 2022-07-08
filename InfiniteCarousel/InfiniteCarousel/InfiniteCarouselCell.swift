@@ -51,7 +51,22 @@ class InfiniteCarouselCell: UICollectionViewCell {
         }
     }
     
+    func animation(completion: (()->Void)?) {
+        let expandAnimation = CABasicAnimation(keyPath: "transform.scale")
+        expandAnimation.fromValue = 1.0
+        expandAnimation.toValue = 1.05
+//        expandAnimation.timingFunction = CAMediaTimingFunction(controlPoints: 0.95, 0.2, 1, 0.05)
+        expandAnimation.duration = 0.1
+        expandAnimation.fillMode = .forwards
+        expandAnimation.isRemovedOnCompletion = false
+        layer.add(expandAnimation, forKey: expandAnimation.keyPath)
+    }
+    func removeAnimation() {
+        layer.removeAllAnimations()
+    }
+    
     override func prepareForReuse() {
         imageView.image = nil
+        removeAnimation()
     }
 }
