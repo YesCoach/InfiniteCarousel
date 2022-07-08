@@ -42,25 +42,27 @@ class InfiniteCarouselCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
+
+    /// 셀에 이미지를 적용합니다.
     func configure(with image: UIImage) {
-        /// 셀에 이미지를 적용합니다.
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.imageView.image = image
         }
     }
     
-    func animation(completion: (()->Void)?) {
+    /// 셀에 크기가 커지는 애니메이션 효과를 적용합니다.
+    func animation(_ completion: (()->Void)? = nil) {
         let expandAnimation = CABasicAnimation(keyPath: "transform.scale")
         expandAnimation.fromValue = 1.0
         expandAnimation.toValue = 1.05
-//        expandAnimation.timingFunction = CAMediaTimingFunction(controlPoints: 0.95, 0.2, 1, 0.05)
         expandAnimation.duration = 0.1
         expandAnimation.fillMode = .forwards
         expandAnimation.isRemovedOnCompletion = false
         layer.add(expandAnimation, forKey: expandAnimation.keyPath)
     }
+    
+    /// 셀에 적용된 애니메이션 효과를 제거합니다.
     func removeAnimation() {
         layer.removeAllAnimations()
     }
