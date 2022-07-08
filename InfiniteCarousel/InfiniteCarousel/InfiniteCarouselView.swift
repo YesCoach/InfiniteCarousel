@@ -20,6 +20,7 @@ class InfiniteCarouselView: UIView {
         infiniteCollectionView.velocityMultiplier = 1
         infiniteCollectionView.decelerationRate = .fast
         infiniteCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        infiniteCollectionView.backgroundColor = .white
 
         // 레이아웃 설정
         infiniteCollectionView.infiniteLayout.itemSize = CGSize(width: width, height: height)
@@ -144,8 +145,13 @@ extension InfiniteCarouselView: UICollectionViewDelegate {
     /// 셀 선택 시 해당 셀로 이동
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         bannerStop()
-        carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        bannerMove(by: timeInterval)
+        UIView.animate(withDuration: 3) { [weak self] in
+            guard let self = self else { return }
+            self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        } completion: { [weak self] _ in
+            guard let self = self else { return }
+            self.bannerMove(by: self.timeInterval)
+        }
     }
 }
 
@@ -167,8 +173,9 @@ extension InfiniteCarouselView {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self,
-                  self.currentIndexPath != self.carouselView.centeredIndexPath else { return }
-            self.carouselView.removePrePostCellAnimation()
+                  let currentIndexPath = self.currentIndexPath,
+                  currentIndexPath != self.carouselView.centeredIndexPath else { return }
+            self.carouselView.removePrefixCellAnimation(indexPath: currentIndexPath)
             self.carouselView.enrollCellAnimation()
         }
         bannerMove(by: timeInterval)
@@ -179,33 +186,23 @@ extension InfiniteCarouselView {
 extension InfiniteCollectionView {
     /// 자동 스크롤 메서드
     open override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
-        removeCurrentCellAnimation()
+        guard let centeredIndexPath = centeredIndexPath else { return }
+        removePrefixCellAnimation(indexPath: centeredIndexPath)
         super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
         let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell
-        cell?.animation()
+        cell?.animationToExpand()
     }
 
     /// 셀 크기 커지는 애니메이션 효과 적용
     func enrollCellAnimation() {
         guard let indexPath = centeredIndexPath,
               let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell else { return }
-        cell.animation()
+        cell.animationToExpand()
     }
 
-    /// 현재 셀의 크기 효과 제거
-    func removeCurrentCellAnimation() {
-        guard let indexPath = centeredIndexPath else { return }
+    /// 이전 셀의 크기 효과 제거
+    func removePrefixCellAnimation(indexPath: IndexPath) {
         let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell
-        cell?.removeAnimation()
-    }
-
-    /// 앞, 뒤 셀의 크기 효과 제거
-    func removePrePostCellAnimation() {
-        guard let indexPath = centeredIndexPath else { return }
-        let prefixIndexPath = IndexPath(item: indexPath.row - 1, section: indexPath.section)
-        let postfixIndexPath = IndexPath(item: indexPath.row + 1, section: indexPath.section)
-        let prefixCell = cellForItem(at: prefixIndexPath) as? InfiniteCarouselCell
-        let postfixCell = cellForItem(at: postfixIndexPath) as? InfiniteCarouselCell
-        [prefixCell, postfixCell].forEach {$0?.removeAnimation()}
+        cell?.animationToShrink()
     }
 }
