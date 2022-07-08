@@ -8,9 +8,8 @@
 import UIKit
 
 class InfiniteCarouselCell: UICollectionViewCell {
-    
-    static let cellIdentifier = "InfiniteCarouselCellIdentifier"
-    
+
+    // MARK: - Views
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -20,8 +19,16 @@ class InfiniteCarouselCell: UICollectionViewCell {
         return imageView
     }()
     
-    // MARK: Initializer
+    // MARK: - Properties
+    static let cellIdentifier = "InfiniteCarouselCellIdentifier"
     
+    /// 애니메이션 관련 프로퍼티
+    /// expandScale: 크기 늘어나는 비율
+    /// expandDuration: 지속 시간
+    private let expandScale = 1.1
+    private let expandDuration = 0.1
+    
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpLayout()
@@ -31,18 +38,7 @@ class InfiniteCarouselCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Methods
-
-    private func setUpLayout() {
-        contentView.addSubview(imageView)
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-    }
-
+    // MARK: - Methods
     /// 셀에 이미지를 적용합니다.
     func configure(with image: UIImage) {
         DispatchQueue.main.async { [weak self] in
@@ -55,8 +51,8 @@ class InfiniteCarouselCell: UICollectionViewCell {
     func animation(_ completion: (()->Void)? = nil) {
         let expandAnimation = CABasicAnimation(keyPath: "transform.scale")
         expandAnimation.fromValue = 1.0
-        expandAnimation.toValue = 1.05
-        expandAnimation.duration = 0.1
+        expandAnimation.toValue = expandScale
+        expandAnimation.duration = expandDuration
         expandAnimation.fillMode = .forwards
         expandAnimation.isRemovedOnCompletion = false
         layer.add(expandAnimation, forKey: expandAnimation.keyPath)
@@ -67,6 +63,16 @@ class InfiniteCarouselCell: UICollectionViewCell {
         layer.removeAllAnimations()
     }
     
+    private func setUpLayout() {
+        contentView.addSubview(imageView)
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+
     override func prepareForReuse() {
         imageView.image = nil
         removeAnimation()

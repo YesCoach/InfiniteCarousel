@@ -36,15 +36,15 @@ class InfiniteCarouselView: UIView {
     /// 자동 스크롤 설정 시간
     private var timeInterval: TimeInterval = 3
     
-    /// maximumTimes의 값은 항상 images.count * 20
+    /// maximumTimes의 값은 무조건 images.count * 20 이여야 합니다.
     private var maximumTimes: Int {
         get { (images?.count ?? 0) * 20 }
     }
     
     /// 셀 크기와 간격
-    private var width: CGFloat = UIScreen.main.bounds.width * 0.85
+    private var width: CGFloat = UIScreen.main.bounds.width * 0.75
     private var height: CGFloat = UIScreen.main.bounds.height * 0.2
-    private var spacing: CGFloat = 20
+    private var spacing: CGFloat = 40
     private var currentIndexPath: IndexPath?
 
     // MARK: - Initializer
@@ -93,6 +93,7 @@ class InfiniteCarouselView: UIView {
         ])
     }
 
+    /// 자동 스크롤을 시작합니다.
     private func bannerMove(by withTimeinterval: TimeInterval) {
         timer = Timer.scheduledTimer(withTimeInterval: withTimeinterval, repeats: true) { [weak self] _ in
             guard let self = self,
@@ -105,6 +106,7 @@ class InfiniteCarouselView: UIView {
         }
     }
 
+    /// 자동 스크롤을 종료합니다.
     private func bannerStop() {
         timer?.invalidate()
     }
