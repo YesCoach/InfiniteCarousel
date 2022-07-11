@@ -9,7 +9,7 @@ import UIKit
 import InfiniteLayout
 
 class InfiniteCarouselView: UIView {
-
+    
     // MARK: - Views
     private lazy var carouselView: InfiniteCollectionView = {
         let infiniteCollectionView = InfiniteCollectionView()
@@ -31,7 +31,7 @@ class InfiniteCarouselView: UIView {
     }()
 
     // MARK: - Properties
-    private var images: [UIImage]? = (1...5).map{UIImage(named: "\($0).png")!}
+    private var images: [UIImage]?
     private var timer: Timer?
     private var group = DispatchGroup()
     
@@ -48,7 +48,8 @@ class InfiniteCarouselView: UIView {
     private var height: CGFloat = UIScreen.main.bounds.height * 0.2
     private var spacing: CGFloat = 40
     private var currentIndexPath: IndexPath?
-
+    private var completionHandler: ((Int) -> ())?
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,12 +67,6 @@ class InfiniteCarouselView: UIView {
     }
 
     // MARK: - Methods
-    /// 셀에 들어갈 이미지 데이터를 초기화 합니다.
-    func configure(with images: [UIImage]?) {
-        self.images = images
-        carouselView.reloadData()
-    }
-
     /// 셀의 크기를 설정합니다.
     func configureCellSize(width: CGFloat, height: CGFloat) {
         self.width = width
@@ -81,6 +76,13 @@ class InfiniteCarouselView: UIView {
     /// 셀의 간격을 설정합니다.
     func configureSpacing(with spacing: CGFloat) {
         self.spacing = spacing
+    }
+    
+    /// 셀에 들어갈 이미지 데이터를 초기화 하고, 셀 선택시 콜백 합니다.
+    func show(images: [UIImage], completion: @escaping (Int) -> () ) {
+        self.images = images
+        carouselView.reloadData()
+        completionHandler = completion
     }
     
     private func setUpLayout() {
@@ -145,7 +147,12 @@ extension InfiniteCarouselView: UICollectionViewDataSource {
 extension InfiniteCarouselView: UICollectionViewDelegate {
     /// 셀 선택 시 해당 셀로 이동
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard indexPath != carouselView.centeredIndexPath else { return }
+        guard indexPath != carouselView.centeredIndexPath else {
+            // 콜백 해야되는 부분
+            let realIndexPath = carouselView.indexPath(from: indexPath)
+            self.completionHandler?(realIndexPath.row)
+            return
+        }
         isUserInteractionEnabled = false
         bannerStop()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in

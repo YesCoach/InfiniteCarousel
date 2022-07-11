@@ -17,6 +17,9 @@ class Main: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpLayout()
+        banner.show(images: (1...5).map{UIImage(named: "\($0).png")!}) { index in
+            print(index)
+        }
     }
     
     private func setUpLayout() {
