@@ -11,22 +11,14 @@ import InfiniteLayout
 class InfiniteCarouselView: UIView {
     
     // MARK: - Views
-    private lazy var carouselView: InfiniteCollectionView = {
+    private var carouselView: InfiniteCollectionView = {
         let infiniteCollectionView = InfiniteCollectionView()
         infiniteCollectionView.register(InfiniteCarouselCell.self, forCellWithReuseIdentifier: InfiniteCarouselCell.cellIdentifier)
-        infiniteCollectionView.dataSource = self
-        infiniteCollectionView.delegate = self
         infiniteCollectionView.isItemPagingEnabled = true
         infiniteCollectionView.velocityMultiplier = 1
         infiniteCollectionView.decelerationRate = .fast
         infiniteCollectionView.translatesAutoresizingMaskIntoConstraints = false
         infiniteCollectionView.backgroundColor = .white
-
-        // 레이아웃 설정
-        infiniteCollectionView.infiniteLayout.itemSize = CGSize(width: width, height: height)
-        infiniteCollectionView.infiniteLayout.scrollDirection = .horizontal
-        infiniteCollectionView.infiniteLayout.minimumLineSpacing = spacing
-        infiniteCollectionView.infiniteLayout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
         return infiniteCollectionView
     }()
 
@@ -63,7 +55,6 @@ class InfiniteCarouselView: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         bannerMove(by: timeInterval)
-        carouselView.enrollCellAnimation()
     }
 
     // MARK: - Methods
@@ -86,6 +77,13 @@ class InfiniteCarouselView: UIView {
     }
     
     private func setUpLayout() {
+        carouselView.dataSource = self
+        carouselView.delegate = self
+        // 레이아웃 설정
+        carouselView.infiniteLayout.itemSize = CGSize(width: width, height: height)
+        carouselView.infiniteLayout.scrollDirection = .horizontal
+        carouselView.infiniteLayout.minimumLineSpacing = spacing
+        carouselView.infiniteLayout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
         backgroundColor = .white
         addSubview(carouselView)
         carouselView.translatesAutoresizingMaskIntoConstraints = false
@@ -106,6 +104,7 @@ class InfiniteCarouselView: UIView {
                 currentIndexPath = IndexPath(item: -1, section: 0)
             }
             let indexPath = IndexPath(item: currentIndexPath.item + 1, section: currentIndexPath.section)
+            self.isUserInteractionEnabled = false
             self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
     }
@@ -139,15 +138,20 @@ extension InfiniteCarouselView: UICollectionViewDataSource {
         }
         let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
         cell.configure(with: images[realIndexPath.row])
+        cell.setNeedsLayout()
+        cell.layoutIfNeeded()
         return cell
     }
 }
 
 // MARK: - Delegate 구현부
 extension InfiniteCarouselView: UICollectionViewDelegate {
+    
     /// 셀 선택 시 해당 셀로 이동
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath != carouselView.centeredIndexPath else {
+            let cell = carouselView.cellForItem(at: indexPath)
+            print(cell?.bounds)
             // 콜백 해야되는 부분
             let realIndexPath = carouselView.indexPath(from: indexPath)
             self.completionHandler?(realIndexPath.row)
@@ -155,11 +159,8 @@ extension InfiniteCarouselView: UICollectionViewDelegate {
         }
         isUserInteractionEnabled = false
         bannerStop()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            guard let self = self else { return }
-            self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            self.bannerMove(by: self.timeInterval)
-        }
+        carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        bannerMove(by: timeInterval)
     }
 }
 
@@ -172,24 +173,25 @@ extension InfiniteCarouselView: UICollectionViewDelegateFlowLayout {
 
 // MARK: - 스크롤시 자동 스크롤 타이머 on/off
 extension InfiniteCarouselView {
+
     /// 터치 할 때 동작
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isUserInteractionEnabled = false
         bannerStop()
         currentIndexPath = carouselView.centeredIndexPath
     }
+
     /// 터치 끝날 때 동작
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self,
                   let currentIndexPath = self.currentIndexPath,
                   currentIndexPath != self.carouselView.centeredIndexPath else { return }
-            self.carouselView.removePrefixCellAnimation(indexPath: currentIndexPath)
-            self.carouselView.enrollCellAnimation()
+
         }
         bannerMove(by: timeInterval)
     }
-    
+
     /// 스크롤이 완전히 끝나면 터치 이벤트 허용
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         isUserInteractionEnabled = true
@@ -199,10 +201,16 @@ extension InfiniteCarouselView {
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         isUserInteractionEnabled = true
     }
+
+    /// 크기 변화에 필요한 메소드
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        carouselView.didScroll(scrollView)
+    }
 }
 
 // MARK: - Animation 관련 구현부
 extension InfiniteCollectionView {
+
     /// 자동 스크롤 메서드
     open override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
         guard let centeredIndexPath = centeredIndexPath,
@@ -210,21 +218,14 @@ extension InfiniteCollectionView {
         super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self else { return }
-            self.removePrefixCellAnimation(indexPath: centeredIndexPath)
-            cell.animationToExpand()
         }
     }
-
-    /// 셀 크기 커지는 애니메이션 효과 적용
-    func enrollCellAnimation() {
-        guard let indexPath = centeredIndexPath,
-              let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell else { return }
-        cell.animationToExpand()
-    }
-
-    /// 이전 셀의 크기 효과 제거
-    func removePrefixCellAnimation(indexPath: IndexPath) {
-        let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell
-        cell?.animationToShrink()
+    
+    func didScroll(_ scrollview: UIScrollView) {
+        for cell in visibleCells {
+            if let infiniteCarouselCell = cell as? InfiniteCarouselCell {
+                infiniteCarouselCell.scale()
+            }
+        }
     }
 }
