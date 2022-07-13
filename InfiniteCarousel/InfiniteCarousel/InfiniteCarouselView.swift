@@ -16,6 +16,7 @@ class InfiniteCarouselView: UIView {
         infiniteCollectionView.register(InfiniteCarouselCell.self, forCellWithReuseIdentifier: InfiniteCarouselCell.cellIdentifier)
         infiniteCollectionView.dataSource = self
         infiniteCollectionView.delegate = self
+        infiniteCollectionView.infiniteDelegate = self
         infiniteCollectionView.isItemPagingEnabled = true
         infiniteCollectionView.velocityMultiplier = 1
         infiniteCollectionView.decelerationRate = .fast
@@ -147,6 +148,7 @@ extension InfiniteCarouselView: UICollectionViewDataSource {
 
 // MARK: - Delegate 구현부
 extension InfiniteCarouselView: UICollectionViewDelegate {
+
     /// 셀 선택 시 해당 셀로 이동
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath != carouselView.centeredIndexPath else {
@@ -157,7 +159,7 @@ extension InfiniteCarouselView: UICollectionViewDelegate {
         }
         isUserInteractionEnabled = false
         bannerStop()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
             self.bannerMove()
@@ -174,25 +176,19 @@ extension InfiniteCarouselView: UICollectionViewDelegateFlowLayout {
 
 // MARK: - 스크롤 관련 구현부
 extension InfiniteCarouselView {
-    /// 터치 할 때 동작
+
+    /// 스크롤 시작 할 때 동작
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isUserInteractionEnabled = false
         startOffset = scrollView.contentOffset.x
         bannerStop()
         currentIndexPath = carouselView.centeredIndexPath
     }
-
-    /// 터치 끝날 때 동작
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            guard let self = self,
-                  // 터치 시작할때 센터 위치
-                  let currentIndexPath = self.currentIndexPath,
-                  currentIndexPath != self.carouselView.centeredIndexPath else { return }
-            self.carouselView.removePrefixCellAnimation(indexPath: currentIndexPath)
-            self.carouselView.enrollCellAnimation()
-        }
+    
+    /// 스크롤 끝날 때 동작
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         bannerMove()
+        userInteractionEnable()
     }
     
     /// 스크롤이 일정 길이 이상 진행된 경우 스크롤 종료
@@ -205,14 +201,15 @@ extension InfiniteCarouselView {
             self.startOffset = nil
         }
     }
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        isUserInteractionEnabled = false
-    }
-    
+
     /// 스크롤 애니메이션이 완전히 끝나면 터치 이벤트 허용
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         userInteractionEnable()
+    }
+    
+    /// 스크롤 인디케이터가 동작할 때 터치 이벤트 차단
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        isUserInteractionEnabled = false
     }
     
     private func userInteractionEnable() {
@@ -225,13 +222,15 @@ extension InfiniteCarouselView {
 
 // MARK: - Animation 관련 구현부
 extension InfiniteCollectionView {
+
     /// 자동 스크롤 메서드
+    /// enrollCellAnimation() 사용하면 안됨
     open override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
         guard let centeredIndexPath = centeredIndexPath,
               let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell else { return }
         super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.removePrefixCellAnimation(indexPath: centeredIndexPath)
             cell.animationToExpand()
@@ -249,5 +248,20 @@ extension InfiniteCollectionView {
     func removePrefixCellAnimation(indexPath: IndexPath) {
         guard let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell else { return }
         cell.animationToShrink()
+    }
+}
+
+extension InfiniteCarouselView: InfiniteCollectionViewDelegate {
+    func infiniteCollectionView(_ infiniteCollectionView: InfiniteCollectionView, didChangeCenteredIndexPath from: IndexPath?, to: IndexPath?) {
+        guard let from = from,
+        let to = to,
+        let prefixCell = infiniteCollectionView.cellForItem(at: from) as? InfiniteCarouselCell,
+        let currentCell = infiniteCollectionView.cellForItem(at: to) as? InfiniteCarouselCell else {
+            return
+        }
+        DispatchQueue.main.async {
+            prefixCell.animationToShrink()
+            currentCell.animationToExpand()
+        }
     }
 }
