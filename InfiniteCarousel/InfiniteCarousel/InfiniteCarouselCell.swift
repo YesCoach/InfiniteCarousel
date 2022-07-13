@@ -23,10 +23,10 @@ class InfiniteCarouselCell: UICollectionViewCell {
     static let cellIdentifier = "InfiniteCarouselCellIdentifier"
     
     /// 애니메이션 관련 프로퍼티
-    /// expandScale: 크기 늘어나는 비율
-    /// expandDuration: 지속 시간
-    private let expandScale = 1.1
-    private let expandDuration = 0.2
+    /// targetScale: 크기 늘어나는 비율
+    /// targetDuration: 지속 시간
+    private let targetScale = 1.1
+    private let targetDuration = 0.2
     private let cellRadius = 20.0
     
     // MARK: - Initializer
@@ -50,26 +50,17 @@ class InfiniteCarouselCell: UICollectionViewCell {
     
     /// 셀에 크기가 커지는 애니메이션 효과를 적용합니다.
     func animationToExpand(_ completion: (()->Void)? = nil) {
-        let expandAnimation = CABasicAnimation(keyPath: "transform.scale")
-        expandAnimation.fromValue = 1.0
-        expandAnimation.toValue = expandScale
-        expandAnimation.duration = expandDuration
-        expandAnimation.fillMode = .forwards
-        expandAnimation.isRemovedOnCompletion = false
-        expandAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
-        layer.add(expandAnimation, forKey: expandAnimation.keyPath)
+        UIView.animate(withDuration: targetDuration) { [weak self] in
+            guard let self = self else { return }
+            self.transform = CGAffineTransform(scaleX: self.targetScale, y: self.targetScale)
+        }
     }
     
     /// 셀에 적용된 애니메이션 효과를 제거합니다.
     func animationToShrink() {
-        let shrinkAnimation = CABasicAnimation(keyPath: "transform.scale")
-        shrinkAnimation.fromValue = expandScale
-        shrinkAnimation.toValue = 1.0
-        shrinkAnimation.duration = expandDuration
-        shrinkAnimation.fillMode = .forwards
-        shrinkAnimation.isRemovedOnCompletion = false
-        shrinkAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
-        layer.add(shrinkAnimation, forKey: shrinkAnimation.keyPath)
+        UIView.animate(withDuration: targetDuration) {
+            self.transform = CGAffineTransform(scaleX: 1, y: 1)
+        }
     }
     
     private func setUpLayout() {
