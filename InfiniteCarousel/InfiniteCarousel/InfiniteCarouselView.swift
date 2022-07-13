@@ -63,6 +63,7 @@ class InfiniteCarouselView: UIView {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
+        bannerStop()
         bannerMove()
         carouselView.enrollCellAnimation()
     }
