@@ -26,8 +26,9 @@ class InfiniteCarouselCell: UICollectionViewCell {
     /// targetScale: 크기 늘어나는 비율
     /// targetDuration: 지속 시간
     private let targetScale = 1.1
-    private let targetDuration = 0.2
+    private let targetDuration = 0.3
     private let cellRadius = 20.0
+    private var animation: UIViewPropertyAnimator?
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -50,17 +51,18 @@ class InfiniteCarouselCell: UICollectionViewCell {
     
     /// 셀에 크기가 커지는 애니메이션 효과를 적용합니다.
     func animationToExpand(_ completion: (()->Void)? = nil) {
-        UIView.animate(withDuration: targetDuration) { [weak self] in
-            guard let self = self else { return }
+        animation = UIViewPropertyAnimator(duration: targetDuration, curve: .easeInOut) {
             self.transform = CGAffineTransform(scaleX: self.targetScale, y: self.targetScale)
         }
+        animation?.startAnimation()
     }
     
     /// 셀에 적용된 애니메이션 효과를 제거합니다.
     func animationToShrink() {
-        UIView.animate(withDuration: targetDuration) {
+        animation = UIViewPropertyAnimator(duration: targetDuration, curve: .easeInOut) {
             self.transform = CGAffineTransform(scaleX: 1, y: 1)
         }
+        animation?.startAnimation()
     }
     
     private func setUpLayout() {
@@ -75,5 +77,6 @@ class InfiniteCarouselCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         imageView.image = nil
+        animation = nil
     }
 }
