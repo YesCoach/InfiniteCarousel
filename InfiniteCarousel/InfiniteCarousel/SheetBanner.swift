@@ -8,9 +8,7 @@
 import UIKit
 import InfiniteLayout
 
-private class SheetBannerView: InfiniteCollectionView {
-    
-}
+private class SheetBannerView: InfiniteCollectionView {}
 
 class SheetBanner: UIView {
     // MARK: - Views
@@ -25,6 +23,10 @@ class SheetBanner: UIView {
         infiniteCollectionView.decelerationRate = .fast
         infiniteCollectionView.translatesAutoresizingMaskIntoConstraints = false
         infiniteCollectionView.backgroundColor = .white
+        infiniteCollectionView.clipsToBounds = true
+        infiniteCollectionView.layer.masksToBounds = true
+        infiniteCollectionView.layer.cornerRadius = 20
+        infiniteCollectionView.layer.maskedCorners = [CACornerMask.layerMinXMinYCorner, CACornerMask.layerMaxXMinYCorner]
         
         // 레이아웃 설정
         infiniteCollectionView.infiniteLayout.itemSize = CGSize(width: width, height: height)
@@ -37,7 +39,7 @@ class SheetBanner: UIView {
     private lazy var indexLabel: UILabel = {
         let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
         label.backgroundColor = UIColor.lightGray
-        label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +49,6 @@ class SheetBanner: UIView {
     // MARK: - Properties
     private var images: [UIImage]?
     private var timer: Timer?
-    private var group = DispatchGroup()
     
     /// 자동 스크롤 설정 시간
     private var timeInterval: TimeInterval = 3
@@ -56,7 +57,7 @@ class SheetBanner: UIView {
     private var maximumTimes: Int {
         get { (images?.count ?? 0) * 20 }
     }
-    
+
     /// 셀 크기와 간격
     private var width: CGFloat = UIScreen.main.bounds.width
     private var height: CGFloat = UIScreen.main.bounds.height * 0.4
@@ -76,6 +77,7 @@ class SheetBanner: UIView {
     }
     
     override func draw(_ rect: CGRect) {
+        configureCellSize(width: rect.width, height: rect.height)
         super.draw(rect)
         bannerStop()
         bannerMove()
@@ -122,7 +124,6 @@ class SheetBanner: UIView {
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
             guard let self = self,
                   var currentIndexPath = self.carouselView.centeredIndexPath else { return }
-            print("11")
             if currentIndexPath.item == self.maximumTimes - 1 {
                 currentIndexPath = IndexPath(item: -1, section: 0)
             }
@@ -160,14 +161,13 @@ extension SheetBanner: UICollectionViewDataSource {
         }
         let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
         cell.configure(with: images[realIndexPath.row])
+        print("\(realIndexPath), \(possibleIndexPath)")
         return cell
     }
 }
 
 // MARK: - Delegate 구현부
 extension SheetBanner: UICollectionViewDelegate {
-
-    /// 셀 선택 시 해당 셀로 이동
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath != carouselView.centeredIndexPath else {
             // 콜백 해야되는 부분
@@ -212,7 +212,7 @@ extension SheetBanner {
     /// 스크롤이 일정 길이 이상 진행된 경우 스크롤 종료
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let startOffset = startOffset else { return }
-        if abs(scrollView.contentOffset.x - startOffset) > UIScreen.main.bounds.maxX * 0.83 {
+        if abs(scrollView.contentOffset.x - startOffset) > UIScreen.main.bounds.maxX * 0.95 {
             scrollView.panGestureRecognizer.isEnabled = false
             scrollView.panGestureRecognizer.isEnabled = true
             userInteractionEnable()
@@ -229,14 +229,8 @@ extension SheetBanner {
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         isUserInteractionEnabled = false
     }
-     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard let images = images else { return }
-        guard let indexPath = carouselView.centeredIndexPath else { return }
-        let realIndexPath = carouselView.indexPath(from: indexPath)
-        indexLabel.text = "\(realIndexPath.item + 1) / \(images.count)"
-    }
 
+    /// 유저의 터치 이벤트를 허용하는 메서드
     private func userInteractionEnable() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             guard let self = self else { return }
@@ -245,17 +239,7 @@ extension SheetBanner {
     }
 }
 
-//// MARK: - Animation 관련 구현부
-//extension SheetBannerView {
-//
-//    /// 자동 스크롤 메서드
-//    open override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
-//        guard let centeredIndexPath = centeredIndexPath,
-//              let cell = cellForItem(at: indexPath) as? SheetBannerCell else { return }
-//        super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
-//    }
-//}
-
+// MARK: - 보여지는 배너가 변경될 경우 호출하는 메서드
 extension SheetBanner: InfiniteCollectionViewDelegate {
     func infiniteCollectionView(_ infiniteCollectionView: InfiniteCollectionView, didChangeCenteredIndexPath from: IndexPath?, to: IndexPath?) {
         guard let to = to,

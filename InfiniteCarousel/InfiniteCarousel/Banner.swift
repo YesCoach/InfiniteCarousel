@@ -35,7 +35,6 @@ class Banner: UIView {
     // MARK: - Properties
     private var images: [UIImage]?
     private var timer: Timer?
-    private var group = DispatchGroup()
     
     /// 자동 스크롤 설정 시간
     private var timeInterval: TimeInterval = 3
