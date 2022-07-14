@@ -35,11 +35,11 @@ class SheetBanner: UIView {
     }()
     
     private lazy var indexLabel: UILabel = {
-        let label = UILabel()
+        let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
         label.backgroundColor = UIColor.lightGray
-        label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
-        label.layer.cornerRadius = 30
-        label.sizeToFit()
+        label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 10
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -59,7 +59,7 @@ class SheetBanner: UIView {
     
     /// 셀 크기와 간격
     private var width: CGFloat = UIScreen.main.bounds.width
-    private var height: CGFloat = UIScreen.main.bounds.height * 0.2
+    private var height: CGFloat = UIScreen.main.bounds.height * 0.4
     private var spacing: CGFloat = 35
     private var currentIndexPath: IndexPath?
     private var completionHandler: ((Int) -> ())?
@@ -79,7 +79,6 @@ class SheetBanner: UIView {
         super.draw(rect)
         bannerStop()
         bannerMove()
-        carouselView.enrollCellAnimation()
     }
     
     // MARK: - Methods
@@ -100,7 +99,6 @@ class SheetBanner: UIView {
     func show(images: [UIImage], completion: @escaping (Int) -> () ) {
         self.images = images
         carouselView.reloadData()
-        indexLabel.text = "1 / \(images.count)"
         completionHandler = completion
     }
     
@@ -114,7 +112,8 @@ class SheetBanner: UIView {
             carouselView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             carouselView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             indexLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            indexLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16)
+            indexLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+            indexLabel.widthAnchor.constraint(equalToConstant: 44)
         ])
     }
     
@@ -123,6 +122,7 @@ class SheetBanner: UIView {
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
             guard let self = self,
                   var currentIndexPath = self.carouselView.centeredIndexPath else { return }
+            print("11")
             if currentIndexPath.item == self.maximumTimes - 1 {
                 currentIndexPath = IndexPath(item: -1, section: 0)
             }
@@ -245,48 +245,22 @@ extension SheetBanner {
     }
 }
 
-// MARK: - Animation 관련 구현부
-extension SheetBannerView {
-
-    /// 자동 스크롤 메서드
-    /// enrollCellAnimation() 사용하면 안됨
-    open override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
-        guard let centeredIndexPath = centeredIndexPath,
-              let cell = cellForItem(at: indexPath) as? BannerCell else { return }
-        super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
-
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.removePrefixCellAnimation(indexPath: centeredIndexPath)
-            cell.animationToExpand()
-        }
-    }
-
-    /// 셀 크기 커지는 애니메이션 효과 적용
-    func enrollCellAnimation() {
-        guard let indexPath = centeredIndexPath,
-              let cell = cellForItem(at: indexPath) as? BannerCell else { return }
-        cell.animationToExpand()
-    }
-    
-    /// 이전 셀의 크기 효과 제거
-    func removePrefixCellAnimation(indexPath: IndexPath) {
-        guard let cell = cellForItem(at: indexPath) as? BannerCell else { return }
-        cell.animationToShrink()
-    }
-}
+//// MARK: - Animation 관련 구현부
+//extension SheetBannerView {
+//
+//    /// 자동 스크롤 메서드
+//    open override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+//        guard let centeredIndexPath = centeredIndexPath,
+//              let cell = cellForItem(at: indexPath) as? SheetBannerCell else { return }
+//        super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
+//    }
+//}
 
 extension SheetBanner: InfiniteCollectionViewDelegate {
     func infiniteCollectionView(_ infiniteCollectionView: InfiniteCollectionView, didChangeCenteredIndexPath from: IndexPath?, to: IndexPath?) {
-        guard let from = from,
-        let to = to,
-        let prefixCell = infiniteCollectionView.cellForItem(at: from) as? BannerCell,
-        let currentCell = infiniteCollectionView.cellForItem(at: to) as? BannerCell else {
-            return
-        }
-        DispatchQueue.main.async {
-            prefixCell.animationToShrink()
-            currentCell.animationToExpand()
-        }
+        guard let to = to,
+              let images = images else { return }
+        let realIndexPath = carouselView.indexPath(from: to)
+        indexLabel.text = "\(realIndexPath.item + 1) / \(images.count)"
     }
 }
