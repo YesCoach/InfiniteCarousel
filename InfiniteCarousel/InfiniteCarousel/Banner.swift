@@ -8,12 +8,13 @@
 import UIKit
 import InfiniteLayout
 
-class InfiniteCarouselView: UIView {
-    
+private class InfiniteCarouselView: InfiniteCollectionView {}
+
+class Banner: UIView {
     // MARK: - Views
-    private lazy var carouselView: InfiniteCollectionView = {
-        let infiniteCollectionView = InfiniteCollectionView()
-        infiniteCollectionView.register(InfiniteCarouselCell.self, forCellWithReuseIdentifier: InfiniteCarouselCell.cellIdentifier)
+    private lazy var carouselView: InfiniteCarouselView = {
+        let infiniteCollectionView = InfiniteCarouselView()
+        infiniteCollectionView.register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.cellIdentifier)
         infiniteCollectionView.dataSource = self
         infiniteCollectionView.delegate = self
         infiniteCollectionView.infiniteDelegate = self
@@ -120,7 +121,7 @@ class InfiniteCarouselView: UIView {
 }
 
 // MARK: - DataSource 구현부
-extension InfiniteCarouselView: UICollectionViewDataSource {
+extension Banner: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let datas = images else {
             debugPrint("이미지 데이터가 없습니다.")
@@ -131,8 +132,8 @@ extension InfiniteCarouselView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: InfiniteCarouselCell.cellIdentifier,
-            for: indexPath) as? InfiniteCarouselCell,
+            withReuseIdentifier: BannerCell.cellIdentifier,
+            for: indexPath) as? BannerCell,
               let images = images else {
             fatalError()
         }
@@ -147,7 +148,7 @@ extension InfiniteCarouselView: UICollectionViewDataSource {
 }
 
 // MARK: - Delegate 구현부
-extension InfiniteCarouselView: UICollectionViewDelegate {
+extension Banner: UICollectionViewDelegate {
 
     /// 셀 선택 시 해당 셀로 이동
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -168,14 +169,14 @@ extension InfiniteCarouselView: UICollectionViewDelegate {
 }
 
 // MARK: - DelegateFlowLayout 구현부
-extension InfiniteCarouselView: UICollectionViewDelegateFlowLayout {
+extension Banner: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return collectionView.frame.width
     }
 }
 
 // MARK: - 스크롤 관련 구현부
-extension InfiniteCarouselView {
+extension Banner {
 
     /// 스크롤 시작 할 때 동작
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -221,13 +222,13 @@ extension InfiniteCarouselView {
 }
 
 // MARK: - Animation 관련 구현부
-extension InfiniteCollectionView {
+extension InfiniteCarouselView {
 
     /// 자동 스크롤 메서드
     /// enrollCellAnimation() 사용하면 안됨
     open override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
         guard let centeredIndexPath = centeredIndexPath,
-              let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell else { return }
+              let cell = cellForItem(at: indexPath) as? BannerCell else { return }
         super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
 
         DispatchQueue.main.async { [weak self] in
@@ -240,23 +241,23 @@ extension InfiniteCollectionView {
     /// 셀 크기 커지는 애니메이션 효과 적용
     func enrollCellAnimation() {
         guard let indexPath = centeredIndexPath,
-              let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell else { return }
+              let cell = cellForItem(at: indexPath) as? BannerCell else { return }
         cell.animationToExpand()
     }
     
     /// 이전 셀의 크기 효과 제거
     func removePrefixCellAnimation(indexPath: IndexPath) {
-        guard let cell = cellForItem(at: indexPath) as? InfiniteCarouselCell else { return }
+        guard let cell = cellForItem(at: indexPath) as? BannerCell else { return }
         cell.animationToShrink()
     }
 }
 
-extension InfiniteCarouselView: InfiniteCollectionViewDelegate {
+extension Banner: InfiniteCollectionViewDelegate {
     func infiniteCollectionView(_ infiniteCollectionView: InfiniteCollectionView, didChangeCenteredIndexPath from: IndexPath?, to: IndexPath?) {
         guard let from = from,
         let to = to,
-        let prefixCell = infiniteCollectionView.cellForItem(at: from) as? InfiniteCarouselCell,
-        let currentCell = infiniteCollectionView.cellForItem(at: to) as? InfiniteCarouselCell else {
+        let prefixCell = infiniteCollectionView.cellForItem(at: from) as? BannerCell,
+        let currentCell = infiniteCollectionView.cellForItem(at: to) as? BannerCell else {
             return
         }
         DispatchQueue.main.async {

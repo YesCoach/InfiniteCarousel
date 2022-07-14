@@ -1,13 +1,13 @@
 //
-//  InfiniteCarouselCell.swift
+//  SheetBannerCell.swift
 //  InfiniteCarousel
 //
-//  Created by Twave on 2022/07/06.
+//  Created by Twave on 2022/07/14.
 //
 
 import UIKit
 
-class InfiniteCarouselCell: UICollectionViewCell {
+class SheetBannerCell: UICollectionViewCell {
 
     // MARK: - Views
     private lazy var imageView: UIImageView = {
@@ -15,20 +15,20 @@ class InfiniteCarouselCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleToFill
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = cellRadius
         return imageView
     }()
     
+//    private lazy var indexView: UILabel = {
+//        let label = UILabel()
+//        label.layer.cornerRadius = 30
+//        label.textColor = UIColor.white
+//        label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+//        label.backgroundColor = UIColor.lightGray
+//        return label
+//    }()
+
     // MARK: - Properties
-    static let cellIdentifier = "InfiniteCarouselCellIdentifier"
-    
-    /// 애니메이션 관련 프로퍼티
-    /// targetScale: 크기 늘어나는 비율
-    /// targetDuration: 지속 시간
-    private let targetScale = 1.1
-    private let targetDuration = 0.3
-    private let cellRadius = 25.0
-    private var animation: UIViewPropertyAnimator?
+    static let cellIdentifier = "SheetBannerCell"
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -48,23 +48,7 @@ class InfiniteCarouselCell: UICollectionViewCell {
             self.imageView.image = image
         }
     }
-    
-    /// 셀에 크기가 커지는 애니메이션 효과를 적용합니다.
-    func animationToExpand(_ completion: (()->Void)? = nil) {
-        animation = UIViewPropertyAnimator(duration: targetDuration, curve: .easeInOut) {
-            self.transform = CGAffineTransform(scaleX: self.targetScale, y: self.targetScale)
-        }
-        animation?.startAnimation()
-    }
-    
-    /// 셀에 적용된 애니메이션 효과를 제거합니다.
-    func animationToShrink() {
-        animation = UIViewPropertyAnimator(duration: targetDuration, curve: .easeOut) {
-            self.transform = CGAffineTransform(scaleX: 1, y: 1)
-        }
-        animation?.startAnimation()
-    }
-    
+
     private func setUpLayout() {
         contentView.addSubview(imageView)
         NSLayoutConstraint.activate([
@@ -77,6 +61,5 @@ class InfiniteCarouselCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         imageView.image = nil
-        animation = nil
     }
 }

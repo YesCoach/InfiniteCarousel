@@ -19,7 +19,7 @@ class InfiniteCarouselDataSource: NSObject, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InfiniteCarouselCell.cellIdentifier, for: indexPath) as? InfiniteCarouselCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerCell.cellIdentifier, for: indexPath) as? BannerCell else {
             return UICollectionViewCell()
         }
         cell.configure(with: data[indexPath.row])
