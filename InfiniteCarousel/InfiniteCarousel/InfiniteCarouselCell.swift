@@ -26,7 +26,7 @@ class InfiniteCarouselCell: UICollectionViewCell {
     /// targetScale: 크기 늘어나는 비율
     /// targetDuration: 지속 시간
     private let targetScale = 1.1
-    private let targetDuration = 0.2
+    private let targetDuration = 0.3
     private let cellRadius = 25.0
     private var animation: UIViewPropertyAnimator?
     
