@@ -76,8 +76,9 @@ class Banner: UIView {
     // MARK: - Methods
     /// 셀의 간격을 설정합니다.
     func configureSpacing(with spacing: CGFloat) {
-        self.spacing = spacing
-        setNeedsLayout()
+        carouselView.infiniteLayout.minimumLineSpacing = spacing
+        carouselView.infiniteLayout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
+        layoutIfNeeded()
     }
     
     /// 자동스크롤 시간을 설정합니다.

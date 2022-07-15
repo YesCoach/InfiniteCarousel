@@ -11,6 +11,7 @@ class Main: UIViewController {
     private lazy var banner: Banner = {
         let carouselView = Banner(frame: .zero)
         carouselView.configureTimeInterval(with: 3)
+        carouselView.configureSpacing(with: 40)
         carouselView.translatesAutoresizingMaskIntoConstraints = false
         return carouselView
     }()
@@ -43,7 +44,7 @@ class Main: UIViewController {
             banner.topAnchor.constraint(equalTo: view.topAnchor, constant: 64),
             banner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             banner.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            banner.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
+            banner.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25),
             sheetBanner.leadingAnchor.constraint(equalTo: banner.leadingAnchor),
             sheetBanner.trailingAnchor.constraint(equalTo: banner.trailingAnchor),
             sheetBanner.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4),
