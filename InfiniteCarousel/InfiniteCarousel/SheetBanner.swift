@@ -18,16 +18,21 @@ class SheetBanner: UIView {
         infiniteCollectionView.dataSource = self
         infiniteCollectionView.delegate = self
         infiniteCollectionView.infiniteDelegate = self
-        infiniteCollectionView.isItemPagingEnabled = true
+        infiniteCollectionView.isItemPagingEnabled = false
         infiniteCollectionView.velocityMultiplier = 1
         infiniteCollectionView.decelerationRate = .fast
         infiniteCollectionView.translatesAutoresizingMaskIntoConstraints = false
         infiniteCollectionView.backgroundColor = .white
-        infiniteCollectionView.clipsToBounds = true
         infiniteCollectionView.layer.masksToBounds = true
         infiniteCollectionView.layer.cornerRadius = 20
         infiniteCollectionView.layer.maskedCorners = [CACornerMask.layerMinXMinYCorner, CACornerMask.layerMaxXMinYCorner]
-        
+        infiniteCollectionView.isScrollEnabled = false
+        leftSwipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeHandler(_:)))
+        leftSwipeRecognizer.direction = .left
+        rightSwipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeHandler(_:)))
+        infiniteCollectionView.addGestureRecognizer(leftSwipeRecognizer)
+        infiniteCollectionView.addGestureRecognizer(rightSwipeRecognizer)
+
         // 레이아웃 설정
         infiniteCollectionView.infiniteLayout.itemSize = CGSize(width: width, height: height)
         infiniteCollectionView.infiniteLayout.scrollDirection = .horizontal
@@ -37,9 +42,10 @@ class SheetBanner: UIView {
     }()
     
     private lazy var indexLabel: UILabel = {
-        let label = PaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+        let label = UILabel()
+        label.textAlignment = .center
         label.backgroundColor = UIColor.lightGray
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.font = UIFont(name: "Helvetica Neue Medium", size: 12)
         label.clipsToBounds = true
         label.layer.cornerRadius = 10
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -48,14 +54,14 @@ class SheetBanner: UIView {
     
     // MARK: - Properties
     private var images: [UIImage]?
-    private var timer: Timer?
+    private var timer: Timer = Timer()
     
     /// 자동 스크롤 설정 시간
-    private var timeInterval: TimeInterval = 3
+    private var timeInterval: TimeInterval = 1
     
-    /// maximumTimes의 값은 무조건 images.count * 20 이여야 합니다.
+    /// Sheet Banner에서 maximumTimes의 값은 무조건 images.count * 17 이여야 합니다.
     private var maximumTimes: Int {
-        get { (images?.count ?? 0) * 20 }
+        get { (images?.count ?? 0) * 17}
     }
 
     /// 셀 크기와 간격
@@ -65,6 +71,8 @@ class SheetBanner: UIView {
     private var currentIndexPath: IndexPath?
     private var completionHandler: ((Int) -> ())?
     private var startOffset: CGFloat?
+    private var leftSwipeRecognizer = UISwipeGestureRecognizer()
+    private var rightSwipeRecognizer = UISwipeGestureRecognizer()
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -76,8 +84,38 @@ class SheetBanner: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func swipeHandler(_ gestureRecognizer : UISwipeGestureRecognizer) {
+        print(#function)
+        if gestureRecognizer.state == .began {
+            bannerStop()
+            print("banner stopped")
+        }
+        if gestureRecognizer.state == .ended {
+            bannerMove()
+            switch gestureRecognizer.direction {
+            case .right:
+                guard var indexPath = carouselView.centeredIndexPath else { return }
+                if indexPath.item == 0 {
+                    indexPath = IndexPath(item: maximumTimes, section: 0)
+                }
+                let targetIndexPath = IndexPath(item: indexPath.item - 1, section: 0)
+                carouselView.scrollToItem(at: targetIndexPath, at: .centeredHorizontally, animated: true)
+            case .left:
+                guard var indexPath = carouselView.centeredIndexPath else { return }
+                if indexPath.item == maximumTimes - 1 {
+                    indexPath = IndexPath(item: 0, section: 0)
+                }
+                let targetIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
+                carouselView.scrollToItem(at: targetIndexPath, at: .centeredHorizontally, animated: true)
+            default:
+                return
+            }
+        }
+    }
+    
     override func draw(_ rect: CGRect) {
         configureCellSize(width: rect.width, height: rect.height)
+        carouselView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
         super.draw(rect)
         bannerStop()
         bannerMove()
@@ -115,12 +153,14 @@ class SheetBanner: UIView {
             carouselView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             indexLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
             indexLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            indexLabel.widthAnchor.constraint(equalToConstant: 44)
+            indexLabel.widthAnchor.constraint(equalToConstant: 40),
+            indexLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
     /// 자동 스크롤을 시작합니다.
     private func bannerMove() {
+        guard timer.isValid == false else { return }
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
             guard let self = self,
                   var currentIndexPath = self.carouselView.centeredIndexPath else { return }
@@ -134,7 +174,7 @@ class SheetBanner: UIView {
     
     /// 자동 스크롤을 종료합니다.
     private func bannerStop() {
-        timer?.invalidate()
+        timer.invalidate()
     }
 }
 
@@ -159,9 +199,9 @@ extension SheetBanner: UICollectionViewDataSource {
         if indexPath.item >= maximumTimes {
             possibleIndexPath = IndexPath(item: 0, section: 0)
         }
+
         let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
         cell.configure(with: images[realIndexPath.row])
-        print("\(realIndexPath), \(possibleIndexPath)")
         return cell
     }
 }
@@ -175,13 +215,6 @@ extension SheetBanner: UICollectionViewDelegate {
             self.completionHandler?(realIndexPath.row)
             return
         }
-        isUserInteractionEnabled = false
-        bannerStop()
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            self.bannerMove()
-        }
     }
 }
 
@@ -194,40 +227,17 @@ extension SheetBanner: UICollectionViewDelegateFlowLayout {
 
 // MARK: - 스크롤 관련 구현부
 extension SheetBanner {
-
-    /// 스크롤 시작 할 때 동작
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        isUserInteractionEnabled = false
-        startOffset = scrollView.contentOffset.x
-        bannerStop()
-        currentIndexPath = carouselView.centeredIndexPath
-    }
-    
-    /// 스크롤 끝날 때 동작
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        bannerMove()
-        userInteractionEnable()
-    }
-    
-    /// 스크롤이 일정 길이 이상 진행된 경우 스크롤 종료
+    /// 스크롤 중에 타이머 중단
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let startOffset = startOffset else { return }
-        if abs(scrollView.contentOffset.x - startOffset) > UIScreen.main.bounds.maxX * 0.95 {
-            scrollView.panGestureRecognizer.isEnabled = false
-            scrollView.panGestureRecognizer.isEnabled = true
-            userInteractionEnable()
-            self.startOffset = nil
-        }
+        print(#function)
+        bannerStop()
     }
 
-    /// 스크롤 애니메이션이 완전히 끝나면 터치 이벤트 허용
+    /// 스크롤 애니메이션이 완전히 끝나면 배너 시작
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        print(#function)
         userInteractionEnable()
-    }
-    
-    /// 스크롤 인디케이터가 동작할 때 터치 이벤트 차단
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        isUserInteractionEnabled = false
+        bannerMove()
     }
 
     /// 유저의 터치 이벤트를 허용하는 메서드

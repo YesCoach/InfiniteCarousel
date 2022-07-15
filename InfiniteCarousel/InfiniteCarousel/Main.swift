@@ -28,7 +28,7 @@ class Main: UIViewController {
         banner.show(images: (1...5).map{UIImage(named: "\($0).png")!}) { index in
             print(index)
         }
-        sheetBanner.show(images: (1...5).map{UIImage(named: "\($0).png")!}) { index in
+        sheetBanner.show(images: (1...3).map{UIImage(named: "\($0).png")!}) { index in
             print(index)
         }
     }

@@ -8,12 +8,12 @@
 import UIKit
 import InfiniteLayout
 
-private class InfiniteCarouselView: InfiniteCollectionView {}
+private class BannerView: InfiniteCollectionView {}
 
 class Banner: UIView {
     // MARK: - Views
-    private lazy var carouselView: InfiniteCarouselView = {
-        let infiniteCollectionView = InfiniteCarouselView()
+    private lazy var carouselView: BannerView = {
+        let infiniteCollectionView = BannerView()
         infiniteCollectionView.register(BannerCell.self, forCellWithReuseIdentifier: BannerCell.cellIdentifier)
         infiniteCollectionView.dataSource = self
         infiniteCollectionView.delegate = self
@@ -37,9 +37,9 @@ class Banner: UIView {
     private var timer: Timer?
     
     /// 자동 스크롤 설정 시간
-    private var timeInterval: TimeInterval = 3
+    private var timeInterval: TimeInterval = 1
     
-    /// maximumTimes의 값은 무조건 images.count * 20 이여야 합니다.
+    /// Banner에서 maximumTimes의 값은 무조건 images.count * 20 이여야 합니다.
     private var maximumTimes: Int {
         get { (images?.count ?? 0) * 20 }
     }
@@ -140,6 +140,7 @@ extension Banner: UICollectionViewDataSource {
         if indexPath.item >= maximumTimes {
             possibleIndexPath = IndexPath(item: 0, section: 0)
         }
+//        print(carouselView.dataSource?.collectionView(carouselView, numberOfItemsInSection: 0))
         let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
         cell.configure(with: images[realIndexPath.row])
         return cell
@@ -221,7 +222,7 @@ extension Banner {
 }
 
 // MARK: - Animation 관련 구현부
-extension InfiniteCarouselView {
+extension BannerView {
 
     /// 자동 스크롤 메서드
     /// enrollCellAnimation() 사용하면 안됨
