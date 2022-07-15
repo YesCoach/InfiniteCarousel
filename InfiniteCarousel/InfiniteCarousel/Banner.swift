@@ -65,6 +65,7 @@ class Banner: UIView {
     
     override func draw(_ rect: CGRect) {
         carouselView.infiniteLayout.itemSize = CGSize(width: rect.width * 0.75, height: rect.height * 0.7)
+        carouselView.layoutIfNeeded()
         carouselView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
         super.draw(rect)
         bannerStop()

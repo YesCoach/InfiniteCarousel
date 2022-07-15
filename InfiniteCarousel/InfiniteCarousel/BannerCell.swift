@@ -50,7 +50,7 @@ class BannerCell: UICollectionViewCell {
     }
     
     /// 셀에 크기가 커지는 애니메이션 효과를 적용합니다.
-    func animationToExpand(_ completion: (()->Void)? = nil) {
+    func animationToExpand() {
         animation = UIViewPropertyAnimator(duration: targetDuration, curve: .easeInOut) {
             self.transform = CGAffineTransform(scaleX: self.targetScale, y: self.targetScale)
         }

@@ -63,7 +63,7 @@ class SheetBanner: UIView {
     
     /// Sheet Banner에서 maximumTimes의 값은 무조건 images.count * 17 이여야 합니다.
     private var maximumTimes: Int {
-        get { (images?.count ?? 0) * 17}
+        get { (images?.count ?? 0) * 10}
     }
 
     /// 셀 크기와 간격
@@ -89,6 +89,7 @@ class SheetBanner: UIView {
     
     override func draw(_ rect: CGRect) {
         carouselView.infiniteLayout.itemSize = CGSize(width: rect.width, height: rect.height)
+        carouselView.layoutIfNeeded()
         carouselView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
         super.draw(rect)
         bannerStop()
@@ -163,7 +164,7 @@ class SheetBanner: UIView {
             case .left:
                 guard var indexPath = carouselView.centeredIndexPath else { return }
                 if indexPath.item == maximumTimes - 1 {
-                    indexPath = IndexPath(item: 0, section: 0)
+                    indexPath = IndexPath(item: -1, section: 0)
                 }
                 let targetIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
                 carouselView.scrollToItem(at: targetIndexPath, at: .centeredHorizontally, animated: true)
