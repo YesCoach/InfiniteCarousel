@@ -7,5 +7,8 @@
 import UIKit
 
 class SheetViewController: UIViewController {
-
+    private lazy var sheetBanner: SheetBanner = {
+        let sheetBanner = SheetBanner()
+        return sheetBanner
+    }()
 }

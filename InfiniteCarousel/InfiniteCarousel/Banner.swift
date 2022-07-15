@@ -37,7 +37,7 @@ class Banner: UIView {
     private var timer: Timer?
     
     /// 자동 스크롤 설정 시간
-    private var timeInterval: TimeInterval = 1
+    private var timeInterval: TimeInterval = 2
     
     /// Banner에서 maximumTimes의 값은 무조건 images.count * 20 이여야 합니다.
     private var maximumTimes: Int {
@@ -81,6 +81,11 @@ class Banner: UIView {
         self.spacing = spacing
     }
     
+    /// 자동스크롤 시간을 설정합니다.
+    func configureTimeInterval(with time: Double) {
+        self.timeInterval = time
+    }
+    
     /// 셀에 들어갈 이미지 데이터를 초기화 하고, 셀 선택시 콜백 합니다.
     func show(images: [UIImage], completion: @escaping (Int) -> () ) {
         self.images = images
@@ -108,6 +113,7 @@ class Banner: UIView {
             if currentIndexPath.item == self.maximumTimes - 1 {
                 currentIndexPath = IndexPath(item: -1, section: 0)
             }
+            self.isUserInteractionEnabled = false
             let indexPath = IndexPath(item: currentIndexPath.item + 1, section: currentIndexPath.section)
             self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
