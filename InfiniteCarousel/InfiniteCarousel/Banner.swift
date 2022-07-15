@@ -34,7 +34,7 @@ class Banner: UIView {
     
     // MARK: - Properties
     private var images: [UIImage]?
-    private var timer: Timer?
+    private var timer: Timer = Timer()
     
     /// 자동 스크롤 설정 시간
     private var timeInterval: TimeInterval = 2
@@ -55,6 +55,7 @@ class Banner: UIView {
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        print("1")
         setUpLayout()
     }
     
@@ -63,6 +64,8 @@ class Banner: UIView {
     }
     
     override func draw(_ rect: CGRect) {
+        carouselView.infiniteLayout.itemSize = CGSize(width: rect.width * 0.75, height: rect.height * 0.7)
+        carouselView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
         super.draw(rect)
         bannerStop()
         bannerMove()
@@ -70,15 +73,10 @@ class Banner: UIView {
     }
     
     // MARK: - Methods
-    /// 셀의 크기를 설정합니다.
-    func configureCellSize(width: CGFloat, height: CGFloat) {
-        self.width = width
-        self.height = height
-    }
-    
     /// 셀의 간격을 설정합니다.
     func configureSpacing(with spacing: CGFloat) {
         self.spacing = spacing
+        setNeedsLayout()
     }
     
     /// 자동스크롤 시간을 설정합니다.
@@ -107,13 +105,13 @@ class Banner: UIView {
     
     /// 자동 스크롤을 시작합니다.
     private func bannerMove() {
+        guard timer.isValid == false else { return }
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
             guard let self = self,
                   var currentIndexPath = self.carouselView.centeredIndexPath else { return }
             if currentIndexPath.item == self.maximumTimes - 1 {
                 currentIndexPath = IndexPath(item: -1, section: 0)
             }
-            self.isUserInteractionEnabled = false
             let indexPath = IndexPath(item: currentIndexPath.item + 1, section: currentIndexPath.section)
             self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         }
@@ -121,7 +119,7 @@ class Banner: UIView {
     
     /// 자동 스크롤을 종료합니다.
     private func bannerStop() {
-        timer?.invalidate()
+        timer.invalidate()
     }
 }
 
@@ -146,7 +144,6 @@ extension Banner: UICollectionViewDataSource {
         if indexPath.item >= maximumTimes {
             possibleIndexPath = IndexPath(item: 0, section: 0)
         }
-//        print(carouselView.dataSource?.collectionView(carouselView, numberOfItemsInSection: 0))
         let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
         cell.configure(with: images[realIndexPath.row])
         return cell
@@ -230,31 +227,11 @@ extension Banner {
 // MARK: - Animation 관련 구현부
 extension BannerView {
 
-    /// 자동 스크롤 메서드
-    /// enrollCellAnimation() 사용하면 안됨
-    open override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
-        guard let centeredIndexPath = centeredIndexPath,
-              let cell = cellForItem(at: indexPath) as? BannerCell else { return }
-        super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
-
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.removePrefixCellAnimation(indexPath: centeredIndexPath)
-            cell.animationToExpand()
-        }
-    }
-
     /// 셀 크기 커지는 애니메이션 효과 적용
     func enrollCellAnimation() {
         guard let indexPath = centeredIndexPath,
               let cell = cellForItem(at: indexPath) as? BannerCell else { return }
         cell.animationToExpand()
-    }
-    
-    /// 이전 셀의 크기 효과 제거
-    func removePrefixCellAnimation(indexPath: IndexPath) {
-        guard let cell = cellForItem(at: indexPath) as? BannerCell else { return }
-        cell.animationToShrink()
     }
 }
 

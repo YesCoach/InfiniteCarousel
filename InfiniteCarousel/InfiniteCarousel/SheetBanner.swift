@@ -11,6 +11,7 @@ import InfiniteLayout
 private class SheetBannerView: InfiniteCollectionView {}
 
 class SheetBanner: UIView {
+
     // MARK: - Views
     private lazy var carouselView: SheetBannerView = {
         let infiniteCollectionView = SheetBannerView()
@@ -68,7 +69,8 @@ class SheetBanner: UIView {
     /// 셀 크기와 간격
     private var width: CGFloat = UIScreen.main.bounds.width
     private var height: CGFloat = UIScreen.main.bounds.height * 0.4
-    private var spacing: CGFloat = 35
+    private var spacing: CGFloat = 0
+
     private var currentIndexPath: IndexPath?
     private var completionHandler: ((Int) -> ())?
     private var startOffset: CGFloat?
@@ -86,7 +88,7 @@ class SheetBanner: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        configureCellSize(width: rect.width, height: rect.height)
+        carouselView.infiniteLayout.itemSize = CGSize(width: rect.width, height: rect.height)
         carouselView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
         super.draw(rect)
         bannerStop()
@@ -94,13 +96,6 @@ class SheetBanner: UIView {
     }
     
     // MARK: - Methods
-    /// 셀의 크기를 설정합니다.
-    func configureCellSize(width: CGFloat, height: CGFloat) {
-        self.width = width
-        self.height = height
-        carouselView.infiniteLayout.itemSize = CGSize(width: width, height: height)
-    }
-    
     /// 셀의 간격을 설정합니다.
     func configureSpacing(with spacing: CGFloat) {
         self.spacing = spacing

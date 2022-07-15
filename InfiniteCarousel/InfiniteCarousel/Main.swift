@@ -10,14 +10,13 @@ import UIKit
 class Main: UIViewController {
     private lazy var banner: Banner = {
         let carouselView = Banner(frame: .zero)
-        carouselView.configureTimeInterval(with: 2)
+        carouselView.configureTimeInterval(with: 3)
         carouselView.translatesAutoresizingMaskIntoConstraints = false
         return carouselView
     }()
     
     private lazy var sheetBanner: SheetBanner = {
         let sheetBannerView = SheetBanner(frame: .zero)
-        sheetBannerView.configureCellSize(width: 400, height: 200)
         sheetBannerView.configureSpacing(with: 0)
         sheetBannerView.configureTimeInterval(with: 3)
         sheetBannerView.translatesAutoresizingMaskIntoConstraints = false
