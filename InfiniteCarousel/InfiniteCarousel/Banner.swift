@@ -47,7 +47,7 @@ class Banner: UIView {
     /// 셀 크기와 간격
     private var width: CGFloat = UIScreen.main.bounds.width * 0.75
     private var height: CGFloat = UIScreen.main.bounds.height * 0.2
-    private var spacing: CGFloat = 35
+    private var spacing: CGFloat = 40
     private var currentIndexPath: IndexPath?
     private var completionHandler: ((Int) -> ())?
     private var startOffset: CGFloat?
@@ -72,7 +72,7 @@ class Banner: UIView {
         bannerMove()
         carouselView.enrollCellAnimation()
     }
-    
+
     // MARK: - Methods
     /// 셀의 간격을 설정합니다.
     func configureSpacing(with spacing: CGFloat) {
@@ -80,19 +80,20 @@ class Banner: UIView {
         carouselView.infiniteLayout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
         layoutIfNeeded()
     }
-    
+
     /// 자동스크롤 시간을 설정합니다.
+    /// default: 3초
     func configureTimeInterval(with time: Double) {
         self.timeInterval = time
     }
-    
+
     /// 셀에 들어갈 이미지 데이터를 초기화 하고, 셀 선택시 콜백 합니다.
     func show(images: [UIImage], completion: @escaping (Int) -> () ) {
         self.images = images
         carouselView.reloadData()
         completionHandler = completion
     }
-    
+
     private func setUpLayout() {
         backgroundColor = .white
         addSubview(carouselView)
@@ -104,7 +105,7 @@ class Banner: UIView {
             carouselView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
-    
+
     /// 자동 스크롤을 시작합니다.
     private func bannerMove() {
         guard timer.isValid == false else { return }

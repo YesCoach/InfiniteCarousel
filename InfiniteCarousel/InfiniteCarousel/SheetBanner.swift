@@ -105,6 +105,7 @@ class SheetBanner: UIView {
     }
     
     /// 자동 스크롤 시간을 설정합니다.
+    /// default: 3초
     func configureTimeInterval(with timeInterval: Double) {
         self.timeInterval = timeInterval
     }
@@ -127,7 +128,7 @@ class SheetBanner: UIView {
             carouselView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             indexLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
             indexLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            indexLabel.widthAnchor.constraint(equalToConstant: 40),
+            indexLabel.widthAnchor.constraint(equalToConstant: 46),
             indexLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }

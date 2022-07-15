@@ -13,7 +13,7 @@ class BannerCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = cellRadius
         return imageView
@@ -27,7 +27,7 @@ class BannerCell: UICollectionViewCell {
     /// targetDuration: 지속 시간
     private let targetScale = 1.1
     private let targetDuration = 0.3
-    private let cellRadius = 25.0
+    private let cellRadius = 15.0
     private var animation: UIViewPropertyAnimator?
     
     // MARK: - Initializer
