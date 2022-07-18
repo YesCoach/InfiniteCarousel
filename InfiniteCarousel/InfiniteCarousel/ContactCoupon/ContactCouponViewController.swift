@@ -34,17 +34,41 @@ class ContactCouponViewController: UIViewController {
 
 extension ContactCouponViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponSearchCell.identifier, for: indexPath) as? ContactCouponSearchCell else { fatalError() }
-        return cell
+        switch indexPath.row {
+        case 0:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponSearchCell.identifier, for: indexPath) as? ContactCouponSearchCell else { fatalError() }
+            return cell
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponDescriptionCell.identifier, for: indexPath) as? ContactCouponDescriptionCell else { fatalError() }
+            cell.configure(remainCount: 8, todayCount: 0, totalCount: 0)
+            return cell
+        case 2:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponRefreshCell.identifier, for: indexPath) as? ContactCouponRefreshCell else { fatalError() }
+            return cell
+        default:
+            return UITableViewCell()
+        }
+
     }
 }
 
+
+// self sizing cell 구현하기
 extension ContactCouponViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        switch indexPath.row {
+        case 0:
+            return 100
+        case 1:
+            return 130
+        case 2:
+            return 100
+        default:
+            return 100
+        }
     }
 }

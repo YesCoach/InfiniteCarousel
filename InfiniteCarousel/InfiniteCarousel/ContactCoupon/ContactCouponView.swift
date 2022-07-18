@@ -22,5 +22,7 @@ class ContactCouponView: UITableView {
         backgroundColor = .white
         separatorStyle = .none
         register(ContactCouponSearchCell.self, forCellReuseIdentifier: ContactCouponSearchCell.identifier)
+        register(ContactCouponDescriptionCell.self, forCellReuseIdentifier: ContactCouponDescriptionCell.identifier)
+        register(ContactCouponRefreshCell.self, forCellReuseIdentifier: ContactCouponRefreshCell.identifier)
     }
 }
