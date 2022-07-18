@@ -24,5 +24,6 @@ class ContactCouponView: UITableView {
         register(ContactCouponSearchCell.self, forCellReuseIdentifier: ContactCouponSearchCell.identifier)
         register(ContactCouponDescriptionCell.self, forCellReuseIdentifier: ContactCouponDescriptionCell.identifier)
         register(ContactCouponRefreshCell.self, forCellReuseIdentifier: ContactCouponRefreshCell.identifier)
+        register(ContactCouponListCell.self, forCellReuseIdentifier: ContactCouponListCell.identifier)
     }
 }

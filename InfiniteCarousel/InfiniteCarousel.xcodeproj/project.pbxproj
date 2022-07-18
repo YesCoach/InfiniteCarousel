@@ -30,6 +30,8 @@
 		C9BAF5F02884E1A60041CB66 /* ContactCouponSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5EF2884E1A60041CB66 /* ContactCouponSearchCell.swift */; };
 		C9BAF5F22884EEB60041CB66 /* ContactCouponDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F12884EEB60041CB66 /* ContactCouponDescriptionCell.swift */; };
 		C9BAF5F42884FBEE0041CB66 /* ContactCouponRefreshCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */; };
+		C9BAF5F6288508BB0041CB66 /* ContactCouponListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */; };
+		C9BAF5F8288539740041CB66 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F7288539740041CB66 /* ThumbnailView.swift */; };
 		C9BB022A2877F67B0097F518 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB02292877F67B0097F518 /* Main.swift */; };
 		E3EED5B6877B9F77F3BBE8BA /* Pods_InfiniteCarousel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCF6D201A4770AB8F66BF777 /* Pods_InfiniteCarousel.framework */; };
 /* End PBXBuildFile section */
@@ -81,6 +83,8 @@
 		C9BAF5EF2884E1A60041CB66 /* ContactCouponSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponSearchCell.swift; sourceTree = "<group>"; };
 		C9BAF5F12884EEB60041CB66 /* ContactCouponDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponDescriptionCell.swift; sourceTree = "<group>"; };
 		C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponRefreshCell.swift; sourceTree = "<group>"; };
+		C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponListCell.swift; sourceTree = "<group>"; };
+		C9BAF5F7288539740041CB66 /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
 		C9BB02292877F67B0097F518 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		CA1482C6EC54089A2D098809 /* Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig"; path = "Target Support Files/Pods-InfiniteCarousel-InfiniteCarouselUITests/Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D3CE70999F31051DF578484F /* Pods-InfiniteCarousel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InfiniteCarousel.release.xcconfig"; path = "Target Support Files/Pods-InfiniteCarousel/Pods-InfiniteCarousel.release.xcconfig"; sourceTree = "<group>"; };
@@ -208,6 +212,8 @@
 				C9BAF5EF2884E1A60041CB66 /* ContactCouponSearchCell.swift */,
 				C9BAF5F12884EEB60041CB66 /* ContactCouponDescriptionCell.swift */,
 				C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */,
+				C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */,
+				C9BAF5F7288539740041CB66 /* ThumbnailView.swift */,
 			);
 			path = ContactCoupon;
 			sourceTree = "<group>";
@@ -476,7 +482,9 @@
 				C9BAF5F02884E1A60041CB66 /* ContactCouponSearchCell.swift in Sources */,
 				C9BAF5E1287F9C070041CB66 /* Banner.swift in Sources */,
 				C9BAF5F22884EEB60041CB66 /* ContactCouponDescriptionCell.swift in Sources */,
+				C9BAF5F6288508BB0041CB66 /* ContactCouponListCell.swift in Sources */,
 				C9BAF5E92884D9270041CB66 /* ContactCouponViewController.swift in Sources */,
+				C9BAF5F8288539740041CB66 /* ThumbnailView.swift in Sources */,
 				C9BAF5F42884FBEE0041CB66 /* ContactCouponRefreshCell.swift in Sources */,
 				C9BB022A2877F67B0097F518 /* Main.swift in Sources */,
 				C9AD82D02875266A002D5EDF /* AppDelegate.swift in Sources */,

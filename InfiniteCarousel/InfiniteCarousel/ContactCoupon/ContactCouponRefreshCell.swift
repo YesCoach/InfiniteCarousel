@@ -32,6 +32,8 @@ class ContactCouponRefreshCell: UITableViewCell {
         return button
     }()
     
+    var completion: (() -> Void)?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpLayout()
@@ -42,19 +44,24 @@ class ContactCouponRefreshCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(completion: @escaping () -> Void) {
+        self.completion = completion
+    }
+    
     private func setUpLayout() {
         [descriptionLabel, refreshButton].forEach { contentView.addSubview($0) }
         NSLayoutConstraint.activate([
             descriptionLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             refreshButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            refreshButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            refreshButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             refreshButton.widthAnchor.constraint(equalToConstant: 70)
         ])
     }
     
     private func setUpUI() {
-        contentView.backgroundColor = .white
+        backgroundColor = .white
+        selectionStyle = .none
     }
     
     private func getCurrentDate() -> String {
@@ -66,6 +73,7 @@ class ContactCouponRefreshCell: UITableViewCell {
     }
     
     @objc private func refreshList(_ sender: UIButton) {
+        completion
         descriptionLabel.text = "목록 새로고침 : " + getCurrentDate()
     }
 }

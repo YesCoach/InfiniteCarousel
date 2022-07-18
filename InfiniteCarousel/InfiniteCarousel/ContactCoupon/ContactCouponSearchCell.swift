@@ -37,13 +37,14 @@ class ContactCouponSearchCell: UITableViewCell {
         contentView.addSubview(searchBar)
         NSLayoutConstraint.activate([
             searchBar.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            searchBar.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             searchBar.heightAnchor.constraint(equalTo: contentView.heightAnchor)
         ])
     }
     
     private func setUpUI() {
-        contentView.backgroundColor = .white
+        backgroundColor = .white
+        selectionStyle = .none
     }
 }

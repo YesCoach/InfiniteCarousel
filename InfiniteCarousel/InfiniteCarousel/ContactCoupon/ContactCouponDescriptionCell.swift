@@ -106,24 +106,25 @@ class ContactCouponDescriptionCell: UITableViewCell {
         }
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             descriptionLabel.bottomAnchor.constraint(equalTo: todayCouponLabel.topAnchor, constant: -32),
             todayCouponLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
-            todayCouponLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            todayCouponLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
             todayCouponCountLabel.topAnchor.constraint(equalTo: todayCouponLabel.topAnchor),
-            todayCouponCountLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            todayCouponCountLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             separator.topAnchor.constraint(equalTo: todayCouponLabel.bottomAnchor, constant: 8),
-            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            separator.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            separator.trailingAnchor.constraint(equalTo: todayCouponCountLabel.trailingAnchor),
             separator.heightAnchor.constraint(equalToConstant: 1),
             totalCouponLabel.topAnchor.constraint(equalTo: separator.bottomAnchor, constant: 8),
-            totalCouponLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            totalCouponLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
             totalCouponCountLabel.topAnchor.constraint(equalTo: totalCouponLabel.topAnchor),
-            totalCouponCountLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            totalCouponCountLabel.trailingAnchor.constraint(equalTo: todayCouponCountLabel.trailingAnchor)
         ])
     }
     
     private func setUpUI() {
-        contentView.backgroundColor = .white
+        backgroundColor = .white
+        selectionStyle = .none
     }
 }
