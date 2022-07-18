@@ -23,6 +23,8 @@ class ContactCouponSearchCell: UITableViewCell {
         return searchBar
     }()
 
+    private var completion: ((String) -> Void)?
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpLayout()
@@ -31,6 +33,10 @@ class ContactCouponSearchCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(completion: @escaping (String) -> Void) {
+        self.completion = completion
     }
     
     private func setUpLayout() {
@@ -46,5 +52,11 @@ class ContactCouponSearchCell: UITableViewCell {
     private func setUpUI() {
         backgroundColor = .white
         selectionStyle = .none
+    }
+}
+
+extension ContactCouponSearchCell: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        completion?(searchText)
     }
 }

@@ -85,6 +85,15 @@ extension ContactCouponViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponSearchCell.identifier,
                                                            for: indexPath) as? ContactCouponSearchCell
             else { fatalError() }
+            cell.configure { text in
+                self.contacts.filter {
+                    let name = $0.familyName + $0.givenName
+                    return name.contains(text)
+                }
+                DispatchQueue.main.async {
+                    tableView.reloadData()
+                }
+            }
             return cell
         case 0 where indexPath.row == 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponDescriptionCell.identifier,
