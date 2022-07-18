@@ -25,6 +25,8 @@
 		C9BAF5DF287F96620041CB66 /* SheetBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5DE287F96620041CB66 /* SheetBanner.swift */; };
 		C9BAF5E1287F9C070041CB66 /* Banner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5E0287F9C070041CB66 /* Banner.swift */; };
 		C9BAF5E3287FAEC40041CB66 /* SheetBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5E2287FAEC40041CB66 /* SheetBannerCell.swift */; };
+		C9BAF5E92884D9270041CB66 /* ContactCouponViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5E82884D9270041CB66 /* ContactCouponViewController.swift */; };
+		C9BAF5EB2884D9E90041CB66 /* ContactCouponView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5EA2884D9E90041CB66 /* ContactCouponView.swift */; };
 		C9BB022A2877F67B0097F518 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB02292877F67B0097F518 /* Main.swift */; };
 		E3EED5B6877B9F77F3BBE8BA /* Pods_InfiniteCarousel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCF6D201A4770AB8F66BF777 /* Pods_InfiniteCarousel.framework */; };
 /* End PBXBuildFile section */
@@ -71,6 +73,8 @@
 		C9BAF5DE287F96620041CB66 /* SheetBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetBanner.swift; sourceTree = "<group>"; };
 		C9BAF5E0287F9C070041CB66 /* Banner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Banner.swift; sourceTree = "<group>"; };
 		C9BAF5E2287FAEC40041CB66 /* SheetBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetBannerCell.swift; sourceTree = "<group>"; };
+		C9BAF5E82884D9270041CB66 /* ContactCouponViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponViewController.swift; sourceTree = "<group>"; };
+		C9BAF5EA2884D9E90041CB66 /* ContactCouponView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponView.swift; sourceTree = "<group>"; };
 		C9BB02292877F67B0097F518 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		CA1482C6EC54089A2D098809 /* Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig"; path = "Target Support Files/Pods-InfiniteCarousel-InfiniteCarouselUITests/Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D3CE70999F31051DF578484F /* Pods-InfiniteCarousel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InfiniteCarousel.release.xcconfig"; path = "Target Support Files/Pods-InfiniteCarousel/Pods-InfiniteCarousel.release.xcconfig"; sourceTree = "<group>"; };
@@ -158,10 +162,9 @@
 				C9AD82CF2875266A002D5EDF /* AppDelegate.swift */,
 				C9AD82D12875266A002D5EDF /* SceneDelegate.swift */,
 				C9BB02292877F67B0097F518 /* Main.swift */,
-				C9BAF5E0287F9C070041CB66 /* Banner.swift */,
-				C9AD82FF28752CAE002D5EDF /* BannerCell.swift */,
-				C9BAF5DE287F96620041CB66 /* SheetBanner.swift */,
-				C9BAF5E2287FAEC40041CB66 /* SheetBannerCell.swift */,
+				C9BAF5ED2884DA070041CB66 /* Banner */,
+				C9BAF5EE2884DA160041CB66 /* SheetBanner */,
+				C9BAF5EC2884D9FB0041CB66 /* ContactCoupon */,
 				C9AD82D82875266B002D5EDF /* Assets.xcassets */,
 				C9AD82DA2875266B002D5EDF /* LaunchScreen.storyboard */,
 				C9AD82DD2875266B002D5EDF /* Info.plist */,
@@ -189,6 +192,33 @@
 				C9AD82F22875266C002D5EDF /* InfiniteCarouselUITestsLaunchTests.swift */,
 			);
 			path = InfiniteCarouselUITests;
+			sourceTree = "<group>";
+		};
+		C9BAF5EC2884D9FB0041CB66 /* ContactCoupon */ = {
+			isa = PBXGroup;
+			children = (
+				C9BAF5E82884D9270041CB66 /* ContactCouponViewController.swift */,
+				C9BAF5EA2884D9E90041CB66 /* ContactCouponView.swift */,
+			);
+			path = ContactCoupon;
+			sourceTree = "<group>";
+		};
+		C9BAF5ED2884DA070041CB66 /* Banner */ = {
+			isa = PBXGroup;
+			children = (
+				C9BAF5E0287F9C070041CB66 /* Banner.swift */,
+				C9AD82FF28752CAE002D5EDF /* BannerCell.swift */,
+			);
+			path = Banner;
+			sourceTree = "<group>";
+		};
+		C9BAF5EE2884DA160041CB66 /* SheetBanner */ = {
+			isa = PBXGroup;
+			children = (
+				C9BAF5DE287F96620041CB66 /* SheetBanner.swift */,
+				C9BAF5E2287FAEC40041CB66 /* SheetBannerCell.swift */,
+			);
+			path = SheetBanner;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,8 +465,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9BAF5E1287F9C070041CB66 /* Banner.swift in Sources */,
+				C9BAF5E92884D9270041CB66 /* ContactCouponViewController.swift in Sources */,
 				C9BB022A2877F67B0097F518 /* Main.swift in Sources */,
 				C9AD82D02875266A002D5EDF /* AppDelegate.swift in Sources */,
+				C9BAF5EB2884D9E90041CB66 /* ContactCouponView.swift in Sources */,
 				C9AD830028752CAE002D5EDF /* BannerCell.swift in Sources */,
 				C9BAF5E3287FAEC40041CB66 /* SheetBannerCell.swift in Sources */,
 				C9AD82D22875266A002D5EDF /* SceneDelegate.swift in Sources */,
