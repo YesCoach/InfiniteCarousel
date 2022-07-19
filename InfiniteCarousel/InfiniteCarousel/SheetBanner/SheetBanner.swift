@@ -54,6 +54,31 @@ class SheetBanner: UIView {
         return label
     }()
     
+    private lazy var footerView: UIView = {
+        let footerView = UIView()
+        footerView.backgroundColor = .white
+        footerView.translatesAutoresizingMaskIntoConstraints = false
+        return footerView
+    }()
+    
+    private lazy var dismissButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(dismiss(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("닫기", for: .normal)
+        button.setTitleColor(UIColor.black, for: .normal)
+        return button
+    }()
+    
+    private lazy var todayDismissButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(todayDismiss(_:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("오늘 그만보기", for: .normal)
+        button.setTitleColor(UIColor.lightGray, for: .normal)
+        return button
+    }()
+    
     // MARK: - Properties
     private var images: [UIImage]?
     private var timer: Timer = Timer()
@@ -117,19 +142,35 @@ class SheetBanner: UIView {
         completionHandler = completion
     }
     
+    @objc private func dismiss(_ sender: UIButton) {
+        debugPrint(#function)
+    }
+    
+    @objc private func todayDismiss(_ sender: UIButton) {
+        debugPrint(#function)
+    }
+    
     private func setUpLayout() {
         backgroundColor = .white
-        addSubview(carouselView)
-        addSubview(indexLabel)
+        [todayDismissButton, dismissButton].forEach {footerView.addSubview($0)}
+        [carouselView, indexLabel, footerView].forEach {addSubview($0)}
         NSLayoutConstraint.activate([
+            todayDismissButton.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
+            todayDismissButton.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: 16),
+            dismissButton.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
+            dismissButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -16),
             carouselView.topAnchor.constraint(equalTo: self.topAnchor),
             carouselView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             carouselView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            carouselView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            carouselView.bottomAnchor.constraint(equalTo: footerView.topAnchor),
             indexLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
             indexLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             indexLabel.widthAnchor.constraint(equalToConstant: 46),
-            indexLabel.heightAnchor.constraint(equalToConstant: 20)
+            indexLabel.heightAnchor.constraint(equalToConstant: 20),
+            footerView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.25),
+            footerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            footerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            footerView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
     
