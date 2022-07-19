@@ -7,6 +7,12 @@
 
 import UIKit
 import Contacts
+import MessageUI
+
+protocol ContactCouponListCellDelegate: AnyObject {
+    func jumpingCouponReceived(contact: CNContact)
+    func isAlreadySend(contact: CNContact) -> Bool
+}
 
 class ContactCouponListCell: UITableViewCell {
     static let identifier = "ContactCouponListCell"
@@ -44,22 +50,30 @@ class ContactCouponListCell: UITableViewCell {
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 15
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(sendButtonClicked(_:)), for: .touchUpInside)
         return button
     }()
     
+    // MARK: - Properties
+    
     private var contact: CNContact? {
         willSet {
-            guard let newValue = newValue else { return }
+            guard let newValue = newValue, let delegate = delegate else { return }
             if newValue.familyName != "" {
                 thumbnailView.configure(with: newValue.familyName)
             } else {
                 thumbnailView.configure(with: newValue.givenName)
             }
             nameLabel.text = newValue.familyName + newValue.givenName
-
             phoneNumberLabel.text = newValue.phoneNumbers[0].value.stringValue
+            if delegate.isAlreadySend(contact: newValue) {
+                sendButton.isHidden = true
+            }
         }
     }
+    
+    private var completion: ((MFMessageComposeViewController) -> Void)?
+    weak var delegate: ContactCouponListCellDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -76,8 +90,21 @@ class ContactCouponListCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 12.0, left: 16, bottom: 12, right: 16))
     }
 
-    func configure(with contact: CNContact) {
+    func configure(with contact: CNContact, completion: @escaping (MFMessageComposeViewController) -> Void) {
         self.contact = contact
+        self.completion = completion
+    }
+    
+    @objc private func sendButtonClicked(_ sender: UIButton) {
+        debugPrint(#function)
+        guard let phoneNumber = contact?.phoneNumbers[0].value.stringValue else { return }
+        let messageComposer = MFMessageComposeViewController()
+        messageComposer.messageComposeDelegate = self
+        if MFMessageComposeViewController.canSendText(){
+            messageComposer.recipients = [phoneNumber]
+            messageComposer.body = "text message"
+            completion?(messageComposer)
+        }
     }
     
     private func setUpLayout() {
@@ -111,5 +138,27 @@ class ContactCouponListCell: UITableViewCell {
     override func prepareForReuse() {
         nameLabel.text = nil
         phoneNumberLabel.text = nil
+        sendButton.isHidden = false
+    }
+}
+
+extension ContactCouponListCell: MFMessageComposeViewControllerDelegate {
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        switch result {
+        case MessageComposeResult.sent:
+            print("전송 완료")
+            guard let contact = contact else { return }
+            delegate?.jumpingCouponReceived(contact: contact)
+            break
+        case MessageComposeResult.cancelled:
+            print("취소")
+            break
+        case MessageComposeResult.failed:
+            print("전송 실패")
+            break
+        @unknown default:
+            fatalError()
+        }
+        controller.dismiss(animated: true, completion: nil)
     }
 }

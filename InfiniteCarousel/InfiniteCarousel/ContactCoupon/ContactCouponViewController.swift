@@ -41,9 +41,15 @@ class ContactCouponViewController: UIViewController {
 
     private var contacts: [CNContact] = []
     private var filteredContacts: [CNContact] = []
-    private var remainCount: Int = 10
-    private var todayCount: Int = 0
+    private let possibleCount = 10
+    private var remainCount: Int {
+        return possibleCount - alreadySendUser.count
+    }
+    private var todayCount: Int {
+        return alreadySendUser.count
+    }
     private var totalCount: Int = 0
+    private var alreadySendUser: [CNContact] = []
     
     override func viewDidLoad() {
         setUpLayout()
@@ -167,7 +173,10 @@ extension ContactCouponViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponListCell.identifier,
                                                            for: indexPath) as? ContactCouponListCell
             else { fatalError() }
-            cell.configure(with: filteredContacts[indexPath.row])
+            cell.delegate = self
+            cell.configure(with: filteredContacts[indexPath.row]) {
+                self.present($0, animated: true, completion: nil)
+            }
             return cell
         default:
             fatalError()
@@ -219,6 +228,19 @@ extension ContactCouponViewController: UISearchBarDelegate {
 extension ContactCouponViewController: RefreshContactsListDelegate {
     func refresh() {
         fetchContacts()
+    }
+}
+
+extension ContactCouponViewController: ContactCouponListCellDelegate {
+    func isAlreadySend(contact: CNContact) -> Bool {
+        return alreadySendUser.contains(contact)
+    }
+    
+    func jumpingCouponReceived(contact: CNContact) {
+        alreadySendUser.append(contact)
+        DispatchQueue.main.async {
+            self.contactCouponView.reloadData()
+        }
     }
 }
 
