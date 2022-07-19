@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol RefreshContactsList: AnyObject {
+protocol RefreshContactsListDelegate: AnyObject {
     func refresh()
 }
 
@@ -36,7 +36,7 @@ class ContactCouponRefreshCell: UITableViewCell {
         return button
     }()
     
-    weak var delegate: RefreshContactsList?
+    weak var delegate: RefreshContactsListDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

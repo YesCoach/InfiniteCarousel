@@ -41,38 +41,17 @@ class ContactCouponViewController: UIViewController {
 
     private var contacts: [CNContact] = []
     private var filteredContacts: [CNContact] = []
+    private var remainCount: Int = 10
+    private var todayCount: Int = 0
+    private var totalCount: Int = 0
     
     override func viewDidLoad() {
         setUpLayout()
+        setUpNavigationBar()
+        setUpKeyboard()
         fetchContacts()
-        setupNavigationBar()
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(keyboardDismiss(_:)))
-        view.addGestureRecognizer(tap)
     }
-    
-    @objc func keyboardDismiss(_ sender: UITapGestureRecognizer) {
-        view.endEditing(true)
-    }
-    
-    @objc func adjustForKeyboard(notification: Notification) {
-        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
-        let keyboardScreenEndFrame = keyboardValue.cgRectValue
-        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
-
-        if notification.name == UIResponder.keyboardWillHideNotification {
-            contactCouponView.contentInset = .zero
-        } else {
-            contactCouponView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
-        }
-
-        contactCouponView.scrollIndicatorInsets = contactCouponView.contentInset
-    }
-    
     func fetchContacts() {
         let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey] as [CNKeyDescriptor]
         let request = CNContactFetchRequest(keysToFetch: keysToFetch)
@@ -113,7 +92,7 @@ class ContactCouponViewController: UIViewController {
         ])
     }
     
-    private func setupNavigationBar() {
+    private func setUpNavigationBar() {
         navigationItem.title = "목돈지원금 쿠폰 보내기"
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         navigationItem.leftBarButtonItem = leftBarButton
@@ -121,9 +100,36 @@ class ContactCouponViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .white
         navigationController?.navigationBar.tintColor = .black
     }
-
+    
+    private func setUpKeyboard() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(keyboardDismiss(_:)))
+        view.addGestureRecognizer(tap)
+    }
+    
     @objc private func didTapBackButton(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func adjustForKeyboard(notification: Notification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            contactCouponView.contentInset = .zero
+        } else {
+            contactCouponView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+        }
+
+        contactCouponView.scrollIndicatorInsets = contactCouponView.contentInset
+    }
+
+    @objc func keyboardDismiss(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
 }
 
@@ -149,7 +155,7 @@ extension ContactCouponViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponDescriptionCell.identifier,
                                                            for: indexPath) as? ContactCouponDescriptionCell
             else { fatalError() }
-            cell.configure(remainCount: 8, todayCount: 0, totalCount: 0)
+            cell.configure(remainCount: remainCount, todayCount: todayCount, totalCount: totalCount)
             return cell
         case 0 where indexPath.row == 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactCouponRefreshCell.identifier,
@@ -169,8 +175,6 @@ extension ContactCouponViewController: UITableViewDataSource {
     }
 }
 
-
-// self sizing cell 구현하기
 extension ContactCouponViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
@@ -195,19 +199,6 @@ extension ContactCouponViewController: UITableViewDelegate {
 
 }
 
-extension CNContact {
-    func name() -> String {
-        return self.familyName + self.givenName
-    }
-    
-    static func < (lhd: CNContact, rhd: CNContact) -> Bool {
-        let lhdName = lhd.name()
-        let rhdName = rhd.name()
-        
-        return lhdName < rhdName
-    }
-}
-
 extension ContactCouponViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredContacts = searchText.isEmpty ? contacts : contacts.filter{($0.familyName+$0.givenName).contains(searchText)}.sorted(by: <)
@@ -225,8 +216,21 @@ extension ContactCouponViewController: UISearchBarDelegate {
     }
 }
 
-extension ContactCouponViewController: RefreshContactsList {
+extension ContactCouponViewController: RefreshContactsListDelegate {
     func refresh() {
         fetchContacts()
+    }
+}
+
+extension CNContact {
+    func name() -> String {
+        return self.familyName + self.givenName
+    }
+    
+    static func < (lhd: CNContact, rhd: CNContact) -> Bool {
+        let lhdName = lhd.name()
+        let rhdName = rhd.name()
+        
+        return lhdName < rhdName
     }
 }
