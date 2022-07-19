@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol RefreshContactsList: AnyObject {
+    func refresh()
+}
+
 class ContactCouponRefreshCell: UITableViewCell {
     static let identifier = "ContactCouponRefreshCell"
     
@@ -32,7 +36,7 @@ class ContactCouponRefreshCell: UITableViewCell {
         return button
     }()
     
-    var completion: (() -> Void)?
+    weak var delegate: RefreshContactsList?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -42,10 +46,6 @@ class ContactCouponRefreshCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configure(completion: @escaping () -> Void) {
-        self.completion = completion
     }
     
     private func setUpLayout() {
@@ -67,13 +67,13 @@ class ContactCouponRefreshCell: UITableViewCell {
     private func getCurrentDate() -> String {
         let date = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "M월 d일 a h:m"
+        formatter.dateFormat = "M월 d일 a h:mm"
         formatter.locale = Locale(identifier: "ko_KR")
         return formatter.string(from: date)
     }
     
     @objc private func refreshList(_ sender: UIButton) {
-        completion
+        delegate?.refresh()
         descriptionLabel.text = "목록 새로고침 : " + getCurrentDate()
     }
 }

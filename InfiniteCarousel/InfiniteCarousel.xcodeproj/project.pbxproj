@@ -27,7 +27,6 @@
 		C9BAF5E3287FAEC40041CB66 /* SheetBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5E2287FAEC40041CB66 /* SheetBannerCell.swift */; };
 		C9BAF5E92884D9270041CB66 /* ContactCouponViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5E82884D9270041CB66 /* ContactCouponViewController.swift */; };
 		C9BAF5EB2884D9E90041CB66 /* ContactCouponView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5EA2884D9E90041CB66 /* ContactCouponView.swift */; };
-		C9BAF5F02884E1A60041CB66 /* ContactCouponSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5EF2884E1A60041CB66 /* ContactCouponSearchCell.swift */; };
 		C9BAF5F22884EEB60041CB66 /* ContactCouponDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F12884EEB60041CB66 /* ContactCouponDescriptionCell.swift */; };
 		C9BAF5F42884FBEE0041CB66 /* ContactCouponRefreshCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */; };
 		C9BAF5F6288508BB0041CB66 /* ContactCouponListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */; };
@@ -80,7 +79,6 @@
 		C9BAF5E2287FAEC40041CB66 /* SheetBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetBannerCell.swift; sourceTree = "<group>"; };
 		C9BAF5E82884D9270041CB66 /* ContactCouponViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponViewController.swift; sourceTree = "<group>"; };
 		C9BAF5EA2884D9E90041CB66 /* ContactCouponView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponView.swift; sourceTree = "<group>"; };
-		C9BAF5EF2884E1A60041CB66 /* ContactCouponSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponSearchCell.swift; sourceTree = "<group>"; };
 		C9BAF5F12884EEB60041CB66 /* ContactCouponDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponDescriptionCell.swift; sourceTree = "<group>"; };
 		C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponRefreshCell.swift; sourceTree = "<group>"; };
 		C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponListCell.swift; sourceTree = "<group>"; };
@@ -209,7 +207,6 @@
 			children = (
 				C9BAF5E82884D9270041CB66 /* ContactCouponViewController.swift */,
 				C9BAF5EA2884D9E90041CB66 /* ContactCouponView.swift */,
-				C9BAF5EF2884E1A60041CB66 /* ContactCouponSearchCell.swift */,
 				C9BAF5F12884EEB60041CB66 /* ContactCouponDescriptionCell.swift */,
 				C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */,
 				C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */,
@@ -479,7 +476,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9BAF5F02884E1A60041CB66 /* ContactCouponSearchCell.swift in Sources */,
 				C9BAF5E1287F9C070041CB66 /* Banner.swift in Sources */,
 				C9BAF5F22884EEB60041CB66 /* ContactCouponDescriptionCell.swift in Sources */,
 				C9BAF5F6288508BB0041CB66 /* ContactCouponListCell.swift in Sources */,

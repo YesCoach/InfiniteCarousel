@@ -37,8 +37,12 @@ class ContactCouponListCell: UITableViewCell {
     
     private lazy var sendButton: UIButton = {
         let button = UIButton()
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         button.setTitle("보내기", for: .normal)
         button.setTitleColor(UIColor.blue, for: .normal)
+        button.backgroundColor = UIColor(red: 242/255, green: 243/255, blue: 245/255, alpha: 1)
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 15
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -84,7 +88,7 @@ class ContactCouponListCell: UITableViewCell {
             thumbnailView.widthAnchor.constraint(equalTo: thumbnailView.heightAnchor),
             thumbnailView.heightAnchor.constraint(equalTo: contentView.heightAnchor),
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: thumbnailView.trailingAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: thumbnailView.trailingAnchor, constant: 12),
             nameLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.45),
             nameLabel.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor),
             phoneNumberLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
@@ -92,10 +96,9 @@ class ContactCouponListCell: UITableViewCell {
             phoneNumberLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             phoneNumberLabel.heightAnchor.constraint(equalTo: nameLabel.heightAnchor),
             phoneNumberLabel.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor),
-            sendButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             sendButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             sendButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            sendButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.17),
+            sendButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.18),
         ])
     }
     

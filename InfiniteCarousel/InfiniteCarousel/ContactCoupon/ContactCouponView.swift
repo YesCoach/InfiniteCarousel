@@ -10,7 +10,7 @@ import UIKit
 class ContactCouponView: UITableView {
 
     override init(frame: CGRect, style: UITableView.Style) {
-        super.init(frame: frame, style: style)
+        super.init(frame: frame, style: .grouped)
         setUpTableView()
     }
 
@@ -21,7 +21,6 @@ class ContactCouponView: UITableView {
     private func setUpTableView() {
         backgroundColor = .white
         separatorStyle = .none
-        register(ContactCouponSearchCell.self, forCellReuseIdentifier: ContactCouponSearchCell.identifier)
         register(ContactCouponDescriptionCell.self, forCellReuseIdentifier: ContactCouponDescriptionCell.identifier)
         register(ContactCouponRefreshCell.self, forCellReuseIdentifier: ContactCouponRefreshCell.identifier)
         register(ContactCouponListCell.self, forCellReuseIdentifier: ContactCouponListCell.identifier)
