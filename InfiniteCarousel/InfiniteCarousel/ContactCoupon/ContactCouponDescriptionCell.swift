@@ -21,7 +21,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
     private lazy var todayCouponLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .thin)
         label.textColor = UIColor(red: 139/255, green: 148/255, blue: 161/255, alpha: 1)
         label.text = "오늘 받은 점핑 쿠폰"
         return label
@@ -30,7 +30,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
     private lazy var todayCouponCountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = UIColor(red: 139/255, green: 148/255, blue: 161/255, alpha: 1)
         return label
     }()
@@ -38,7 +38,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
     private lazy var totalCouponLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .thin)
         label.textColor = UIColor(red: 139/255, green: 148/255, blue: 161/255, alpha: 1)
         label.text = "지금까지 받은 점핑 쿠폰"
         return label
@@ -47,7 +47,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
     private lazy var totalCouponCountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = UIColor(red: 139/255, green: 148/255, blue: 161/255, alpha: 1)
         return label
     }()
@@ -55,7 +55,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
     private lazy var separator: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.separator
+        view.backgroundColor = UIColor(red: 209/255, green: 213/255, blue: 220/255, alpha: 1)
         return view
     }()
     
@@ -105,7 +105,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
             contentView.addSubview($0)
         }
         NSLayoutConstraint.activate([
-            descriptionLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 32),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             descriptionLabel.bottomAnchor.constraint(equalTo: todayCouponLabel.topAnchor, constant: -32),
             todayCouponLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
@@ -115,11 +115,13 @@ class ContactCouponDescriptionCell: UITableViewCell {
             separator.topAnchor.constraint(equalTo: todayCouponLabel.bottomAnchor, constant: 8),
             separator.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
             separator.trailingAnchor.constraint(equalTo: todayCouponCountLabel.trailingAnchor),
-            separator.heightAnchor.constraint(equalToConstant: 1),
+            separator.heightAnchor.constraint(equalToConstant: 0.5),
             totalCouponLabel.topAnchor.constraint(equalTo: separator.bottomAnchor, constant: 8),
             totalCouponLabel.leadingAnchor.constraint(equalTo: descriptionLabel.leadingAnchor),
+            totalCouponLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             totalCouponCountLabel.topAnchor.constraint(equalTo: totalCouponLabel.topAnchor),
-            totalCouponCountLabel.trailingAnchor.constraint(equalTo: todayCouponCountLabel.trailingAnchor)
+            totalCouponCountLabel.trailingAnchor.constraint(equalTo: todayCouponCountLabel.trailingAnchor),
+            totalCouponCountLabel.bottomAnchor.constraint(equalTo: totalCouponLabel.bottomAnchor)
         ])
     }
     

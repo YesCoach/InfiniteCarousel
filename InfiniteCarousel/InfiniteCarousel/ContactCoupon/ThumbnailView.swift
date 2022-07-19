@@ -11,7 +11,7 @@ class ThumbnailView: UIView {
     private lazy var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textColor = UIColor(red: 139/255, green: 148/255, blue: 161/255, alpha: 1)
         return label
     }()
@@ -45,6 +45,7 @@ class ThumbnailView: UIView {
     }
     
     func configure(with string: String) {
+        setUpUI()
         guard let initial = string.first else { return }
         label.text = String(initial)
     }
