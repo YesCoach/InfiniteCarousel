@@ -49,6 +49,13 @@ class ContactCouponViewController: UIViewController {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(keyboardDismiss(_:)))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func keyboardDismiss(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
@@ -208,14 +215,18 @@ extension ContactCouponViewController: UISearchBarDelegate {
             self.contactCouponView.reloadData()
         }
     }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
 }
 
 extension ContactCouponViewController: RefreshContactsList {
     func refresh() {
         fetchContacts()
     }
-}
-
-extension ContactCouponViewController: UIScrollViewDelegate {
-
 }
