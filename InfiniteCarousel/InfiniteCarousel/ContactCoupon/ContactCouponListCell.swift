@@ -9,6 +9,7 @@ import UIKit
 import Contacts
 import MessageUI
 
+/// 문자 보내기와 관련된 프로토콜 입니다.
 protocol ContactCouponListCellDelegate: AnyObject {
     func jumpingCouponReceived(contact: CNContact)
     func isAlreadySend(contact: CNContact) -> Bool
@@ -18,7 +19,6 @@ class ContactCouponListCell: UITableViewCell {
     static let identifier = "ContactCouponListCell"
 
     // MARK: - Views
-
     private lazy var thumbnailView: ThumbnailView = {
         let thumbnailView = ThumbnailView()
         thumbnailView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +55,6 @@ class ContactCouponListCell: UITableViewCell {
     }()
     
     // MARK: - Properties
-    
     private var contact: CNContact? {
         willSet {
             guard let newValue = newValue, let delegate = delegate else { return }
@@ -71,10 +70,10 @@ class ContactCouponListCell: UITableViewCell {
             }
         }
     }
-    
     private var completion: ((MFMessageComposeViewController) -> Void)?
     weak var delegate: ContactCouponListCellDelegate?
     
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpLayout()
@@ -89,15 +88,24 @@ class ContactCouponListCell: UITableViewCell {
         super.layoutSubviews()
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 12.0, left: 16, bottom: 12, right: 16))
     }
+    
+    override func prepareForReuse() {
+        nameLabel.text = nil
+        phoneNumberLabel.text = nil
+        sendButton.isHidden = false
+    }
 
+    // MARK: - Method
+    /// 연락처 정보와 '보내기' 버튼 클릭 시 수행할 completion으로 셀을 구성합니다.
+    /// completion: MFMessageComposeViewController를 present 해야 합니다.
     func configure(with contact: CNContact, completion: @escaping (MFMessageComposeViewController) -> Void) {
         self.contact = contact
         self.completion = completion
     }
     
+    /// 보내기 버튼을 클릭하면 메세지 창으로 이동
     @objc private func sendButtonClicked(_ sender: UIButton) {
-        debugPrint(#function)
-        guard let phoneNumber = contact?.phoneNumbers[0].value.stringValue else { return }
+        guard let phoneNumber = contact?.phoneNumbers[0].value.stringValue.formattedPhoneNumber() else { return }
         let messageComposer = MFMessageComposeViewController()
         messageComposer.messageComposeDelegate = self
         if MFMessageComposeViewController.canSendText(){
@@ -134,14 +142,9 @@ class ContactCouponListCell: UITableViewCell {
         backgroundColor = .white
         selectionStyle = .none
     }
-    
-    override func prepareForReuse() {
-        nameLabel.text = nil
-        phoneNumberLabel.text = nil
-        sendButton.isHidden = false
-    }
 }
 
+// MARK: - MFMessageComposeViewControllerDelegate 구현부
 extension ContactCouponListCell: MFMessageComposeViewControllerDelegate {
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         switch result {
@@ -160,40 +163,5 @@ extension ContactCouponListCell: MFMessageComposeViewControllerDelegate {
             fatalError()
         }
         controller.dismiss(animated: true, completion: nil)
-    }
-}
-
-extension String {
-    func formattedPhoneNumber() -> String {
-        let _str = self.replacingOccurrences(of: "-", with: "").replacingOccurrences(of: "/", with: "").replacingOccurrences(of: "+82", with: "0")
-        let arr = Array(_str)
-        if arr.count > 3 {
-            let prefix = String(format: "%@%@", String(arr[0]), String(arr[1]))
-            if prefix == "02" {
-                if let regex = try? NSRegularExpression(pattern: "([0-9]{2})([0-9]{3,4})([0-9]{4})", options: .caseInsensitive) {
-                    let modString = regex.stringByReplacingMatches(in: _str, options: [],
-                                                                   range: NSRange(_str.startIndex..., in: _str),
-                                                                   withTemplate: "$1-$2-$3")
-                    return modString
-                }
-                
-            } else if prefix == "15" || prefix == "16" || prefix == "18" {
-                if let regex = try? NSRegularExpression(pattern: "([0-9]{4})([0-9]{4})", options: .caseInsensitive) {
-                    let modString = regex.stringByReplacingMatches(in: _str, options: [],
-                                                                   range: NSRange(_str.startIndex..., in: _str),
-                                                                   withTemplate: "$1-$2")
-                    return modString
-                }
-            }
-            else {
-                if let regex = try? NSRegularExpression(pattern: "([0-9]{3})([0-9]{3,4})([0-9]{4})", options: .caseInsensitive) {
-                    let modString = regex.stringByReplacingMatches(in: _str, options: [],
-                                                                   range: NSRange(_str.startIndex..., in: _str),
-                                                                   withTemplate: "$1-$2-$3")
-                    return modString
-                }
-            }
-        }
-        return self
     }
 }

@@ -31,6 +31,8 @@
 		C9BAF5F42884FBEE0041CB66 /* ContactCouponRefreshCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */; };
 		C9BAF5F6288508BB0041CB66 /* ContactCouponListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */; };
 		C9BAF5F8288539740041CB66 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5F7288539740041CB66 /* ThumbnailView.swift */; };
+		C9BAF5FC2887B54F0041CB66 /* Extension+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5FB2887B54F0041CB66 /* Extension+String.swift */; };
+		C9BAF5FE2887B90F0041CB66 /* Extension+CNContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BAF5FD2887B90F0041CB66 /* Extension+CNContact.swift */; };
 		C9BB022A2877F67B0097F518 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BB02292877F67B0097F518 /* Main.swift */; };
 		E3EED5B6877B9F77F3BBE8BA /* Pods_InfiniteCarousel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCF6D201A4770AB8F66BF777 /* Pods_InfiniteCarousel.framework */; };
 /* End PBXBuildFile section */
@@ -83,6 +85,8 @@
 		C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponRefreshCell.swift; sourceTree = "<group>"; };
 		C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCouponListCell.swift; sourceTree = "<group>"; };
 		C9BAF5F7288539740041CB66 /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
+		C9BAF5FB2887B54F0041CB66 /* Extension+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+String.swift"; sourceTree = "<group>"; };
+		C9BAF5FD2887B90F0041CB66 /* Extension+CNContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+CNContact.swift"; sourceTree = "<group>"; };
 		C9BB02292877F67B0097F518 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		CA1482C6EC54089A2D098809 /* Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig"; path = "Target Support Files/Pods-InfiniteCarousel-InfiniteCarouselUITests/Pods-InfiniteCarousel-InfiniteCarouselUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D3CE70999F31051DF578484F /* Pods-InfiniteCarousel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InfiniteCarousel.release.xcconfig"; path = "Target Support Files/Pods-InfiniteCarousel/Pods-InfiniteCarousel.release.xcconfig"; sourceTree = "<group>"; };
@@ -211,6 +215,8 @@
 				C9BAF5F32884FBEE0041CB66 /* ContactCouponRefreshCell.swift */,
 				C9BAF5F5288508BB0041CB66 /* ContactCouponListCell.swift */,
 				C9BAF5F7288539740041CB66 /* ThumbnailView.swift */,
+				C9BAF5FB2887B54F0041CB66 /* Extension+String.swift */,
+				C9BAF5FD2887B90F0041CB66 /* Extension+CNContact.swift */,
 			);
 			path = ContactCoupon;
 			sourceTree = "<group>";
@@ -484,6 +490,8 @@
 				C9BAF5F42884FBEE0041CB66 /* ContactCouponRefreshCell.swift in Sources */,
 				C9BB022A2877F67B0097F518 /* Main.swift in Sources */,
 				C9AD82D02875266A002D5EDF /* AppDelegate.swift in Sources */,
+				C9BAF5FE2887B90F0041CB66 /* Extension+CNContact.swift in Sources */,
+				C9BAF5FC2887B54F0041CB66 /* Extension+String.swift in Sources */,
 				C9BAF5EB2884D9E90041CB66 /* ContactCouponView.swift in Sources */,
 				C9AD830028752CAE002D5EDF /* BannerCell.swift in Sources */,
 				C9BAF5E3287FAEC40041CB66 /* SheetBannerCell.swift in Sources */,

@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// 연락처 리스트를 초기화하는 프로토콜
 protocol RefreshContactsListDelegate: AnyObject {
     func refresh()
 }
@@ -38,6 +39,7 @@ class ContactCouponRefreshCell: UITableViewCell {
     
     weak var delegate: RefreshContactsListDelegate?
     
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpLayout()
@@ -48,6 +50,7 @@ class ContactCouponRefreshCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Methods
     private func setUpLayout() {
         [descriptionLabel, refreshButton].forEach { contentView.addSubview($0) }
         NSLayoutConstraint.activate([
@@ -63,7 +66,7 @@ class ContactCouponRefreshCell: UITableViewCell {
         backgroundColor = .white
         selectionStyle = .none
     }
-    
+
     private func getCurrentDate() -> String {
         let date = Date()
         let formatter = DateFormatter()
@@ -72,6 +75,7 @@ class ContactCouponRefreshCell: UITableViewCell {
         return formatter.string(from: date)
     }
     
+    /// 버튼을 누르면 목록을 초기화합니다.
     @objc private func refreshList(_ sender: UIButton) {
         delegate?.refresh()
         descriptionLabel.text = "목록 새로고침 : " + getCurrentDate()

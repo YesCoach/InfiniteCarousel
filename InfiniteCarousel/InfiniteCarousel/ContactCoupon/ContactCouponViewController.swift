@@ -9,6 +9,8 @@ import UIKit
 import ContactsUI
 
 class ContactCouponViewController: UIViewController {
+
+    // MARK: Views
     private lazy var contactCouponView: ContactCouponView = {
         let contactCouponView = ContactCouponView()
         contactCouponView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,18 +48,22 @@ class ContactCouponViewController: UIViewController {
         return leftBarButton
     }()
 
+    // MARK: - Properties
     private var contacts: [CNContact] = []
     private var filteredContacts: [CNContact] = []
+    private var alreadySendContacts: [CNContact] = []
+    /// 오늘 가능한 횟수
     private let possibleCount = 10
+    /// 총 보낸 횟수
+    private var totalCount: Int = 0
     private var remainCount: Int {
-        return possibleCount - alreadySendUser.count
+        return possibleCount - alreadySendContacts.count
     }
     private var todayCount: Int {
-        return alreadySendUser.count
+        return alreadySendContacts.count
     }
-    private var totalCount: Int = 0
-    private var alreadySendUser: [CNContact] = []
     
+    // MARK: - Initializer
     override func viewDidLoad() {
         setUpLayout()
         setUpNavigationBar()
@@ -65,6 +71,7 @@ class ContactCouponViewController: UIViewController {
         fetchContacts()
     }
 
+    // MARK: - Methods
     func fetchContacts() {
         let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey] as [CNKeyDescriptor]
         let request = CNContactFetchRequest(keysToFetch: keysToFetch)
@@ -94,7 +101,6 @@ class ContactCouponViewController: UIViewController {
                 }
                 alert.addAction(cancelAction)
                 alert.addAction(allowAction)
-                
                 self.present(alert, animated: true)
                 return
             }
@@ -104,6 +110,7 @@ class ContactCouponViewController: UIViewController {
             }
         }
 
+        /// 기존의 contacts를 지우고 새로 받아옵니다.
         contacts.removeAll()
         DispatchQueue.global().async {
             do {
@@ -118,7 +125,6 @@ class ContactCouponViewController: UIViewController {
                 self.contacts = contactData.sorted(by: <)
                 self.filteredContacts = self.contacts
                 DispatchQueue.main.async {
-                    print("aaa")
                     self.contactCouponView.reloadData()
                 }
             }
@@ -160,7 +166,7 @@ class ContactCouponViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func adjustForKeyboard(notification: Notification) {
+    @objc private func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
         let keyboardScreenEndFrame = keyboardValue.cgRectValue
@@ -175,11 +181,12 @@ class ContactCouponViewController: UIViewController {
         contactCouponView.scrollIndicatorInsets = contactCouponView.contentInset
     }
 
-    @objc func keyboardDismiss(_ sender: UITapGestureRecognizer) {
+    @objc private func keyboardDismiss(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
 }
 
+// MARK: - DataSource 구현부
 extension ContactCouponViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -225,6 +232,7 @@ extension ContactCouponViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - TableViewDelegate 구현부
 extension ContactCouponViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
@@ -249,6 +257,7 @@ extension ContactCouponViewController: UITableViewDelegate {
 
 }
 
+// MARK: - SearchBarDelegate 구현부
 extension ContactCouponViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredContacts = searchText.isEmpty ? contacts : contacts.filter{($0.familyName+$0.givenName).contains(searchText)}.sorted(by: <)
@@ -266,34 +275,23 @@ extension ContactCouponViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: - RefreshContractsListDelegate 구현부
 extension ContactCouponViewController: RefreshContactsListDelegate {
     func refresh() {
         fetchContacts()
     }
 }
 
+// MARK: - ContactCouponListCellDelegate 구현부
 extension ContactCouponViewController: ContactCouponListCellDelegate {
     func isAlreadySend(contact: CNContact) -> Bool {
-        return alreadySendUser.contains(contact)
+        return alreadySendContacts.contains(contact)
     }
     
     func jumpingCouponReceived(contact: CNContact) {
-        alreadySendUser.append(contact)
+        alreadySendContacts.append(contact)
         DispatchQueue.main.async {
             self.contactCouponView.reloadData()
         }
-    }
-}
-
-extension CNContact {
-    func name() -> String {
-        return self.familyName + self.givenName
-    }
-    
-    static func < (lhd: CNContact, rhd: CNContact) -> Bool {
-        let lhdName = lhd.name()
-        let rhdName = rhd.name()
-        
-        return lhdName < rhdName
     }
 }

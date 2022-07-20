@@ -10,6 +10,7 @@ import UIKit
 class ContactCouponDescriptionCell: UITableViewCell {
     static let identifier = "ContactCouponDescriptionCell"
     
+    // MARK: - Views
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -60,13 +61,12 @@ class ContactCouponDescriptionCell: UITableViewCell {
     }()
     
     // MARK: - Properties
-    
     private var remainCouponCount: Int = 0 {
         willSet {
             let fullText = """
-\(newValue)명  에게 더 보내면,
-점핑 쿠폰을  \(newValue)장  더 받을 수 있어요!
-"""
+                            \(newValue)명  에게 더 보내면,
+                            점핑 쿠폰을  \(newValue)장  더 받을 수 있어요!
+                            """
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = 10
 
@@ -92,7 +92,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
         }
     }
     
-
+    // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpLayout()
@@ -103,6 +103,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Method
     /// remainCount: 금일 쿠폰을 보낼 수 있는 인원 수
     func configure(remainCount: Int, todayCount: Int, totalCount: Int) {
         self.remainCouponCount = remainCount
