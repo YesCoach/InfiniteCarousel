@@ -25,13 +25,12 @@ class Banner: UIView {
         infiniteCollectionView.backgroundColor = .white
         
         // 레이아웃 설정
-        infiniteCollectionView.infiniteLayout.itemSize = CGSize(width: width, height: height)
         infiniteCollectionView.infiniteLayout.scrollDirection = .horizontal
         infiniteCollectionView.infiniteLayout.minimumLineSpacing = spacing
         infiniteCollectionView.infiniteLayout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
         return infiniteCollectionView
     }()
-    
+
     // MARK: - Properties
     private var images: [UIImage]?
     private var timer: Timer = Timer()
@@ -39,14 +38,7 @@ class Banner: UIView {
     /// 자동 스크롤 설정 시간
     private var timeInterval: TimeInterval = 2
     
-    /// Banner에서 maximumTimes의 값은 무조건 images.count * 20 이여야 합니다.
-    private var maximumTimes: Int {
-        get { (images?.count ?? 0) * 20 }
-    }
-    
     /// 셀 크기와 간격
-    private var width: CGFloat = UIScreen.main.bounds.width * 0.75
-    private var height: CGFloat = UIScreen.main.bounds.height * 0.2
     private var spacing: CGFloat = 40
     private var currentIndexPath: IndexPath?
     private var completionHandler: ((Int) -> ())?
@@ -64,7 +56,7 @@ class Banner: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        carouselView.infiniteLayout.itemSize = CGSize(width: rect.width * 0.75, height: rect.height * 0.7)
+        carouselView.infiniteLayout.itemSize = CGSize(width: rect.width * 0.75, height: rect.height * 0.65)
         carouselView.layoutIfNeeded()
         carouselView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
         super.draw(rect)
@@ -111,9 +103,10 @@ class Banner: UIView {
         guard timer.isValid == false else { return }
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
             guard let self = self,
-                  var currentIndexPath = self.carouselView.centeredIndexPath else { return }
-            if currentIndexPath.item == self.maximumTimes - 1 {
-                currentIndexPath = IndexPath(item: -1, section: 0)
+                  var currentIndexPath = self.carouselView.centeredIndexPath,
+                  let images = self.images else { return }
+            if currentIndexPath.item % images.count == images.count-1 {
+                currentIndexPath = IndexPath(item: -1, section: currentIndexPath.section)
             }
             let indexPath = IndexPath(item: currentIndexPath.item + 1, section: currentIndexPath.section)
             self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
@@ -144,8 +137,8 @@ extension Banner: UICollectionViewDataSource {
             fatalError()
         }
         var possibleIndexPath = indexPath
-        if indexPath.item >= maximumTimes {
-            possibleIndexPath = IndexPath(item: 0, section: 0)
+        if indexPath.item % images.count == 0 {
+            possibleIndexPath = IndexPath(item: 0, section: indexPath.section)
         }
         let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
         cell.configure(with: images[realIndexPath.row])
@@ -161,6 +154,7 @@ extension Banner: UICollectionViewDelegate {
         guard indexPath != carouselView.centeredIndexPath else {
             // 콜백 해야되는 부분
             let realIndexPath = carouselView.indexPath(from: indexPath)
+            print(indexPath)
             self.completionHandler?(realIndexPath.row)
             return
         }

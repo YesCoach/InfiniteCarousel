@@ -69,7 +69,7 @@ class Main: UIViewController {
             banner.topAnchor.constraint(equalTo: view.topAnchor, constant: 32),
             banner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             banner.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            banner.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25),
+            banner.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
             banner2.topAnchor.constraint(equalTo: banner.bottomAnchor, constant: 8),
             banner2.leadingAnchor.constraint(equalTo: banner.leadingAnchor),
             banner2.trailingAnchor.constraint(equalTo: banner.trailingAnchor),
