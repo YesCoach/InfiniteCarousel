@@ -22,7 +22,7 @@ class ContactCouponViewController: UIViewController {
 
     private lazy var searchBar: UISearchBar = {
         let directionalMargins = NSDirectionalEdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24)
-        let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.7, height: 50))
+        let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.7, height: 80))
         let imageView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = UIColor.black
@@ -254,7 +254,6 @@ extension ContactCouponViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
-
 }
 
 // MARK: - SearchBarDelegate 구현부
