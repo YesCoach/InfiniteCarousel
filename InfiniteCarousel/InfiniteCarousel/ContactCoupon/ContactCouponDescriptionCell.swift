@@ -21,7 +21,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
     private lazy var todayCouponLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .thin)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .light)
         label.textColor = UIColor(red: 139/255, green: 148/255, blue: 161/255, alpha: 1)
         label.text = "오늘 받은 점핑 쿠폰"
         return label
@@ -38,7 +38,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
     private lazy var totalCouponLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .thin)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .light)
         label.textColor = UIColor(red: 139/255, green: 148/255, blue: 161/255, alpha: 1)
         label.text = "지금까지 받은 점핑 쿠폰"
         return label
@@ -63,10 +63,19 @@ class ContactCouponDescriptionCell: UITableViewCell {
     
     private var remainCouponCount: Int = 0 {
         willSet {
-            descriptionLabel.text = """
-\(newValue)명 에게 더 보내면,
-점핑 쿠폰을 \(newValue)장 더 받을 수 있어요!
+            let fullText = """
+\(newValue)명  에게 더 보내면,
+점핑 쿠폰을  \(newValue)장  더 받을 수 있어요!
 """
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 10
+            let attributedString = NSMutableAttributedString(string: fullText)
+            let range1 = (fullText as NSString).range(of: "\(newValue)명")
+            let range2 = (fullText as NSString).range(of: "\(newValue)장")
+            attributedString.addAttribute(.foregroundColor, value: UIColor.blue, range: range1)
+            attributedString.addAttribute(.foregroundColor, value: UIColor.blue, range: range2)
+            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, attributedString.length))
+            descriptionLabel.attributedText = attributedString
         }
     }
 

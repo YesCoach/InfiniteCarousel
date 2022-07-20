@@ -21,10 +21,17 @@ class ContactCouponViewController: UIViewController {
     private lazy var searchBar: UISearchBar = {
         let directionalMargins = NSDirectionalEdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24)
         let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.7, height: 50))
+        let imageView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
+        imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = UIColor.black
+        searchBar.searchTextField.leftView = imageView
         searchBar.delegate = self
         searchBar.directionalLayoutMargins = directionalMargins
-        searchBar.placeholder = "이름을 검색해 보세요"
+        let myAttribute = [NSAttributedString.Key.foregroundColor: UIColor(red: 209/255, green: 213/255, blue: 220/255, alpha: 1), NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .regular)]
+        let attributedPlaceholder = NSAttributedString(string: "이름을 검색해 보세요", attributes: myAttribute)
+        searchBar.searchTextField.attributedPlaceholder = attributedPlaceholder
         searchBar.barTintColor = .white
+        searchBar.searchTextField.directionalLayoutMargins = directionalMargins
         searchBar.searchBarStyle = .minimal
         searchBar.searchTextField.textColor = .black
         searchBar.searchTextField.borderStyle = .none
@@ -188,7 +195,7 @@ extension ContactCouponViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0 where indexPath.row == 0:
-            return UIScreen.main.bounds.height * 0.25
+            return UIScreen.main.bounds.height * 0.23
         case 0 where indexPath.row == 1:
             return UIScreen.main.bounds.height * 0.07
         case 1:

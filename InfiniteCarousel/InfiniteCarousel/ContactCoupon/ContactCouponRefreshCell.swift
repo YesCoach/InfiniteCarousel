@@ -18,7 +18,7 @@ class ContactCouponRefreshCell: UITableViewCell {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .light)
         label.textColor = UIColor(red: 139/255, green: 148/255, blue: 161/255, alpha: 1)
         label.text = "목록 새로고침 : " + getCurrentDate()
         return label
