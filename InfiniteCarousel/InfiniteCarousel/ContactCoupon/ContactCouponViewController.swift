@@ -70,6 +70,40 @@ class ContactCouponViewController: UIViewController {
         let request = CNContactFetchRequest(keysToFetch: keysToFetch)
         let store = CNContactStore()
         var contactData = [CNContact]()
+        
+        /// 연락처 권한을 확인하고 얼럿을 띄웁니다.
+        store.requestAccess(for: .contacts) { granted, error in
+            if let error = error {
+                debugPrint(error)
+                let alert = UIAlertController(title: "연락처 접근 허용이 필요해요",
+                                              message: """
+                                                        친구 연락처로 목돈지원금을 보내려면
+                                                        아임인 앱의 연락처 접근을 허용해주세요
+                                                        """,
+                                              preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+                let allowAction = UIAlertAction(title: "허용하기", style: .default) { _ in
+                    guard let settingURL = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    if UIApplication.shared.canOpenURL(settingURL) {
+                         UIApplication.shared.open(settingURL, completionHandler: { (success) in
+                             print("Settings opened: \(success)") // Prints true
+                         })
+                     }
+                }
+                alert.addAction(cancelAction)
+                alert.addAction(allowAction)
+                
+                self.present(alert, animated: true)
+                return
+            }
+            if granted == false {
+                debugPrint("denied")
+                return
+            }
+        }
+
         contacts.removeAll()
         DispatchQueue.global().async {
             do {

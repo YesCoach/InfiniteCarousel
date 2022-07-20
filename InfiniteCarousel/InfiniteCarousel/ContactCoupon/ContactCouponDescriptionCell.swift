@@ -69,6 +69,7 @@ class ContactCouponDescriptionCell: UITableViewCell {
 """
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = 10
+
             let attributedString = NSMutableAttributedString(string: fullText)
             let range1 = (fullText as NSString).range(of: "\(newValue)명")
             let range2 = (fullText as NSString).range(of: "\(newValue)장")

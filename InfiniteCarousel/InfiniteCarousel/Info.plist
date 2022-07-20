@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSContactsUsageDescription</key>
-	<string></string>
+	<string>&quot;친구 연락처로 목돈지원금을 보내려면 아임인 앱의 연락처 접근을 허용해주세요.&quot;</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsTabbedSceneCollection</key>
