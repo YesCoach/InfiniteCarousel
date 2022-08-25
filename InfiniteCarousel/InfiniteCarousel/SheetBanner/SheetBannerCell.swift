@@ -13,19 +13,10 @@ class SheetBannerCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         return imageView
     }()
-    
-//    private lazy var indexView: UILabel = {
-//        let label = UILabel()
-//        label.layer.cornerRadius = 30
-//        label.textColor = UIColor.white
-//        label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
-//        label.backgroundColor = UIColor.lightGray
-//        return label
-//    }()
 
     // MARK: - Properties
     static let cellIdentifier = "SheetBannerCell"

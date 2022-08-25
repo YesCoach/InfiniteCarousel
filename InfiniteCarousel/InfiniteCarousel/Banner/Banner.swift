@@ -9,6 +9,11 @@ import UIKit
 import InfiniteLayout
 
 private class BannerView: InfiniteCollectionView {}
+enum BannerSize {
+    case small
+    case medium
+    case large
+}
 
 class Banner: UIView {
     // MARK: - Views
@@ -36,18 +41,20 @@ class Banner: UIView {
     private var timer: Timer = Timer()
     
     /// 자동 스크롤 설정 시간
-    private var timeInterval: TimeInterval = 2
+    private var timeInterval: TimeInterval = 5
     
     /// 셀 크기와 간격
-    private var spacing: CGFloat = 40
-    private var currentIndexPath: IndexPath?
-    private var completionHandler: ((Int) -> ())?
+    private var spacing: CGFloat = 30
+    private var bannerSize: BannerSize?
+
+    /// 스크롤 시 시작 지점 - 스크롤 관련 로직에 필요
     private var startOffset: CGFloat?
+
+    private var completionHandler: ((Int) -> ())?
     
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("1")
         setUpLayout()
     }
     
@@ -56,13 +63,21 @@ class Banner: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        carouselView.infiniteLayout.itemSize = CGSize(width: rect.width * 0.75, height: rect.height * 0.65)
+        guard let bannerSize = bannerSize else {
+            super.draw(rect)
+            return
+        }
+        switch bannerSize {
+        case .small:
+            carouselView.infiniteLayout.itemSize = CGSize(width: rect.width * 0.8, height: rect.width * 0.3)
+        case .medium:
+            carouselView.infiniteLayout.itemSize = CGSize(width: rect.width * 0.8, height: rect.width * 0.5)
+        case .large:
+            carouselView.infiniteLayout.itemSize = CGSize(width: rect.width * 0.8, height: rect.width * 0.8)
+        }
         carouselView.layoutIfNeeded()
-        carouselView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: false)
-        super.draw(rect)
-        bannerStop()
-        bannerMove()
         carouselView.enrollCellAnimation()
+        super.draw(rect)
     }
 
     // MARK: - Methods
@@ -71,6 +86,12 @@ class Banner: UIView {
         carouselView.infiniteLayout.minimumLineSpacing = spacing
         carouselView.infiniteLayout.sectionInset = UIEdgeInsets(top: 0, left: spacing, bottom: 0, right: 0)
         layoutIfNeeded()
+    }
+    
+    /// 셀의 크기를 설정합니다.
+    /// bannerSize: small, medium. large
+    func configureBannerSize(with bannerSize: BannerSize) {
+        self.bannerSize = bannerSize
     }
 
     /// 자동스크롤 시간을 설정합니다.
@@ -83,6 +104,21 @@ class Banner: UIView {
     func show(images: [UIImage], completion: @escaping (Int) -> () ) {
         self.images = images
         carouselView.reloadData()
+        carouselView.layoutIfNeeded()
+        carouselView.enrollCellAnimation()
+        bannerMove()
+        
+        /// 배너 이미지의 개수가 1보다 작을 경우
+        /// 1. 스크롤 기능 제거
+        /// 2. 앞 뒤 셀을 숨김 처리
+        if images.count <= 1 {
+            carouselView.isScrollEnabled = false
+            guard let preorderCell = carouselView.cellForItem(at: IndexPath(item: carouselView.numberOfItems(inSection: 0) - 1, section: 0)) as? BannerCell,
+                  let nextCell = carouselView.cellForItem(at: IndexPath(item: 1, section: 0)) as? BannerCell else { return }
+            preorderCell.isHidden = true
+            nextCell.isHidden = true
+            bannerStop()
+        }
         completionHandler = completion
     }
 
@@ -103,10 +139,9 @@ class Banner: UIView {
         guard timer.isValid == false else { return }
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
             guard let self = self,
-                  var currentIndexPath = self.carouselView.centeredIndexPath,
-                  let images = self.images else { return }
-            if currentIndexPath.item % images.count == images.count-1 {
-                currentIndexPath = IndexPath(item: -1, section: currentIndexPath.section)
+                  var currentIndexPath = self.carouselView.centeredIndexPath else { return }
+            if currentIndexPath.item == self.carouselView.numberOfItems(inSection: 0) - 1 {
+                currentIndexPath = IndexPath(item: -1, section: 0)
             }
             let indexPath = IndexPath(item: currentIndexPath.item + 1, section: currentIndexPath.section)
             self.carouselView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
@@ -136,11 +171,7 @@ extension Banner: UICollectionViewDataSource {
               let images = images else {
             fatalError()
         }
-        var possibleIndexPath = indexPath
-        if indexPath.item % images.count == 0 {
-            possibleIndexPath = IndexPath(item: 0, section: indexPath.section)
-        }
-        let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
+        let realIndexPath = carouselView.indexPath(from: indexPath)
         cell.configure(with: images[realIndexPath.row])
         return cell
     }
@@ -154,7 +185,6 @@ extension Banner: UICollectionViewDelegate {
         guard indexPath != carouselView.centeredIndexPath else {
             // 콜백 해야되는 부분
             let realIndexPath = carouselView.indexPath(from: indexPath)
-            print(indexPath)
             self.completionHandler?(realIndexPath.row)
             return
         }
@@ -183,7 +213,6 @@ extension Banner {
         isUserInteractionEnabled = false
         startOffset = scrollView.contentOffset.x
         bannerStop()
-        currentIndexPath = carouselView.centeredIndexPath
     }
     
     /// 스크롤 끝날 때 동작
@@ -232,7 +261,10 @@ extension BannerView {
     }
 }
 
+// MARK: InfiniteCollectionViewDelegate 구현부
 extension Banner: InfiniteCollectionViewDelegate {
+
+    /// 가운데에 위치하는 셀이 바뀔때마다 호출 - 셀 크기 증감 애니메이션 동작
     func infiniteCollectionView(_ infiniteCollectionView: InfiniteCollectionView, didChangeCenteredIndexPath from: IndexPath?, to: IndexPath?) {
         guard let from = from,
         let to = to,
@@ -244,5 +276,19 @@ extension Banner: InfiniteCollectionViewDelegate {
             prefixCell.animationToShrink()
             currentCell.animationToExpand()
         }
+    }
+}
+
+// MARK: - Scroll 속도 지연
+extension BannerView {
+    private func super_scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+       super.scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
+    }
+    override func scrollToItem(at indexPath: IndexPath, at scrollPosition: UICollectionView.ScrollPosition, animated: Bool) {
+        self.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            self?.super_scrollToItem(at: indexPath, at: scrollPosition, animated: animated)
+            self?.isUserInteractionEnabled = true
+        })
     }
 }

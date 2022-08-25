@@ -46,10 +46,12 @@ class SheetBanner: UIView {
     private lazy var indexLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.backgroundColor = UIColor.lightGray
+        label.backgroundColor = UIColor.black
+        label.layer.opacity = 0.3
         label.font = UIFont(name: "Helvetica Neue Medium", size: 12)
+        label.textColor = .white
         label.clipsToBounds = true
-        label.layer.cornerRadius = 10
+        label.layer.cornerRadius = 11
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -85,11 +87,6 @@ class SheetBanner: UIView {
     
     /// 자동 스크롤 설정 시간
     private var timeInterval: TimeInterval = 3
-    
-    /// Sheet Banner에서 maximumTimes의 값은 무조건 images.count * 17 이여야 합니다.
-    private var maximumTimes: Int {
-        get { (images?.count ?? 0) * 10}
-    }
 
     /// 셀 크기와 간격
     private var width: CGFloat = UIScreen.main.bounds.width
@@ -180,7 +177,7 @@ class SheetBanner: UIView {
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
             guard let self = self,
                   var currentIndexPath = self.carouselView.centeredIndexPath else { return }
-            if currentIndexPath.item == self.maximumTimes - 1 {
+            if currentIndexPath.item == self.carouselView.numberOfItems(inSection: 0) - 1 {
                 currentIndexPath = IndexPath(item: -1, section: 0)
             }
             let indexPath = IndexPath(item: currentIndexPath.item + 1, section: currentIndexPath.section)
@@ -200,13 +197,13 @@ class SheetBanner: UIView {
             case .right:
                 guard var indexPath = carouselView.centeredIndexPath else { return }
                 if indexPath.item == 0 {
-                    indexPath = IndexPath(item: maximumTimes, section: 0)
+                    indexPath = IndexPath(item: carouselView.numberOfItems(inSection: 0), section: 0)
                 }
                 let targetIndexPath = IndexPath(item: indexPath.item - 1, section: 0)
                 carouselView.scrollToItem(at: targetIndexPath, at: .centeredHorizontally, animated: true)
             case .left:
                 guard var indexPath = carouselView.centeredIndexPath else { return }
-                if indexPath.item == maximumTimes - 1 {
+                if indexPath.item == carouselView.numberOfItems(inSection: 0) - 1 {
                     indexPath = IndexPath(item: -1, section: 0)
                 }
                 let targetIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
@@ -235,15 +232,7 @@ extension SheetBanner: UICollectionViewDataSource {
               let images = images else {
             fatalError()
         }
-        
-        /// maximumTimes: 임의의 SheetBanner의 데이터소스 최대값
-        /// maximumTimes에 도달하면 최초의 인덱스패스로 바꿔줍니다.
-        var possibleIndexPath = indexPath
-        if indexPath.item >= maximumTimes {
-            possibleIndexPath = IndexPath(item: 0, section: 0)
-        }
-
-        let realIndexPath = carouselView.indexPath(from: possibleIndexPath)
+        let realIndexPath = carouselView.indexPath(from: indexPath)
         cell.configure(with: images[realIndexPath.row])
         return cell
     }

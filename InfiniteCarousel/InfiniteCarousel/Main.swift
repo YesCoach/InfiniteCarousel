@@ -11,7 +11,8 @@ class Main: UIViewController {
     private lazy var banner: Banner = {
         let banner = Banner(frame: .zero)
         banner.configureTimeInterval(with: 4)
-        banner.configureSpacing(with: 40)
+        banner.configureSpacing(with: 30)
+        banner.configureBannerSize(with: .medium)
         banner.translatesAutoresizingMaskIntoConstraints = false
         return banner
     }()
@@ -19,7 +20,8 @@ class Main: UIViewController {
     private lazy var banner2: Banner = {
         let banner2 = Banner(frame: .zero)
         banner2.configureTimeInterval(with: 4)
-        banner2.configureSpacing(with: 40)
+        banner2.configureSpacing(with: 30)
+        banner2.configureBannerSize(with: .small)
         banner2.translatesAutoresizingMaskIntoConstraints = false
         return banner2
     }()
@@ -69,11 +71,11 @@ class Main: UIViewController {
             banner.topAnchor.constraint(equalTo: view.topAnchor, constant: 32),
             banner.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             banner.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            banner.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3),
+            banner.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.55),
             banner2.topAnchor.constraint(equalTo: banner.bottomAnchor, constant: 8),
             banner2.leadingAnchor.constraint(equalTo: banner.leadingAnchor),
             banner2.trailingAnchor.constraint(equalTo: banner.trailingAnchor),
-            banner2.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.13),
+            banner2.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.25),
             button.topAnchor.constraint(equalTo: banner2.bottomAnchor, constant: 16),
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             button.widthAnchor.constraint(equalToConstant: 64),
